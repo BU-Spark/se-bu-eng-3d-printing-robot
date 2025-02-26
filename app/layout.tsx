@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Link from "next/link";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,10 +21,41 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <header id="main-header">The Experimental Mechanics Challenge</header>
+          <div id="nav-bar">
+            <div id="sign-in">
+              <SignedOut>
+                <SignInButton />
+                <SignUpButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+            <nav>
+              <ul>
+                <li>
+                  <Link href="/pages/account">Account</Link>
+                </li>
+                <li>
+                  <Link href="/pages/library">Library</Link>
+                </li>
+                <li>
+                  <Link href="/pages/bear-status">BEAR status</Link>
+                </li>
+                <li>
+                  <Link href="/pages/leaderboard">Leaderboards</Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
