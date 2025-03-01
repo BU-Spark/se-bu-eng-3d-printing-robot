@@ -5,11 +5,11 @@
 You can set up this project either manually or by using our setup script.
 
 <details>
-<summary><b>Quick Setup (Using Setup Script)</b></summary>
+<summary><b>Quick Setup (Using Bash Script)</b></summary>
 
 1. **Clone the repository**
    ```bash
-   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
    ```
 
 2. **Navigate to the project directory**
@@ -22,7 +22,7 @@ You can set up this project either manually or by using our setup script.
    <summary><b>Windows</b></summary>
    
    ```bash
-   ./setup
+   ./bash
    ```
    </details>
 
@@ -31,12 +31,12 @@ You can set up this project either manually or by using our setup script.
    
    Make the script executable:
    ```bash
-   chmod +x setup
+   chmod +x bash
    ```
 
    Run the script:
    ```bash
-   ./setup
+   ./bash
    ```
    </details>
    
