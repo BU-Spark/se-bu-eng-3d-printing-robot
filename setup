@@ -52,11 +52,7 @@ case "$(uname -s)" in
         # Install dependencies
         echo "Installing npm dependencies..."
         npm install
-        
-        # Note about env variables
-        echo "NOTE: You will need to set up your environment variables manually."
-        echo "Please check the .env.example file and create a .env file with your values."
-        
+
         # Ask to start server
         echo "Do you want to start the development server now? (y/n)"
         read -r response
