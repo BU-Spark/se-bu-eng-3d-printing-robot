@@ -11,7 +11,7 @@ import {
 } from "@clerk/nextjs";
 
 // Material-UI components
-import { AppBar, Toolbar, Typography, Button, Box, SxProps } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 
 // Material-UI icons
 import BugReportIcon from "@mui/icons-material/BugReport";
@@ -20,6 +20,9 @@ import Library from "@mui/icons-material/LocalLibrary";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import Leaderboard from "@mui/icons-material/Leaderboard";
 import { CSSProperties } from "react";
+
+// Clerk button styles
+import './ClerkButtonStyles.css';
 
 // Props for the NavBar component
 interface NavBarProps {
@@ -32,11 +35,10 @@ const colorScheme = {
   primary: "#CC0000",
   secondary: "#FFFFFF",
   hover: "#E53935",
-	white: "#FFFFFF",
-	black: "#000000",
+  white: "#FFFFFF",
+  black: "#000000",
 };
 
-/**********************************************************************************/
 // STYLING
 const appBarStyles: CSSProperties = {
   backgroundColor: colorScheme.primary,
@@ -45,6 +47,7 @@ const appBarStyles: CSSProperties = {
   margin: 0,
   fontFamily: "font",
 };
+
 const ToolbarStyles: CSSProperties = {
   padding: 0,
   margin: 0,
@@ -52,10 +55,9 @@ const ToolbarStyles: CSSProperties = {
   justifyContent: "space-between",
   alignItems: "center",
 };
-/**********************************************************************************/
 
 const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
-	// Button styles
+  // Button styles
   const buttonStyle: CSSProperties = {
     color: colorScheme.secondary,
     fontFamily: font,
@@ -63,7 +65,8 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
     flexDirection: "column",
     alignItems: "center",
   };
-	// Button hover styles
+
+  // Button hover styles
   const buttonHoverStyle: CSSProperties = {
     backgroundColor: colorScheme.hover,
     color: colorScheme.secondary,
@@ -81,7 +84,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center" }}>
-					{/* Navigation buttons - Account */}
+          {/* Navigation buttons - Account */}
           <Button
             color="inherit"
             component={Link}
@@ -95,7 +98,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
             <AccountCircle />
             Account
           </Button>
-					{/* Navigation buttons - Library */}
+          {/* Navigation buttons - Library */}
           <Button
             color="inherit"
             component={Link}
@@ -109,7 +112,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
             <Library />
             Library
           </Button>
-					{/* Navigation buttons - BEAR Status */}
+          {/* Navigation buttons - BEAR Status */}
           <Button
             color="inherit"
             component={Link}
@@ -123,7 +126,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
             <QueryStatsIcon />
             BEAR status
           </Button>
-					{/* Navigation buttons - Leaderboard */}
+          {/* Navigation buttons - Leaderboard */}
           <Button
             color="inherit"
             component={Link}
@@ -138,59 +141,30 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
             Leaderboards
           </Button>
 
-					{/* Sign In, Sign Up, and Bug Report buttons */}
+          {/* Sign In, Sign Up, and Bug Report buttons */}
           <Box sx={{ ml: 2, display: "flex", gap: 1 }}>
             <SignedOut>
-							{/* Sign In button */}
+              {/* Sign In button */}
               <SignInButton mode="modal">
-                <Button
-                  color="inherit"
-                  variant="outlined"
-                  sx={{
-                    color: colorScheme.secondary,
-                    borderColor: colorScheme.secondary,
-                    backgroundColor: colorScheme.primary,
-                    borderRadius: "8px",
-                    "&:hover": {
-                      backgroundColor: colorScheme.hover,
-                      color: colorScheme.secondary,
-                      opacity: 1,
-                    },
-                    fontFamily: font,
-                  }}
-                >
+                <button className="clerk-button" style={{ fontFamily: font }}>
                   Login
-                </Button>
+                </button>
               </SignInButton>
-							{/* Sign Up button */}
+              
+              {/* Sign Up button */}
               <SignUpButton mode="modal">
-                <Button
-                  color="inherit"
-                  variant="outlined"
-                 sx={{
-                    color: colorScheme.secondary,
-                    borderColor: colorScheme.secondary,
-                    backgroundColor: colorScheme.primary,
-                    borderRadius: "8px",
-                    "&:hover": {
-                      backgroundColor: colorScheme.hover,
-                      color: colorScheme.secondary,
-                      opacity: 1,
-                    },
-                    fontFamily: font,
-                  }}
-                >
+                <button className="clerk-button" style={{ fontFamily: font }}>
                   Register
-                </Button>
+                </button>
               </SignUpButton>
             </SignedOut>
 
-						{/* User button */}
+            {/* User button */}
             <SignedIn>
               <UserButton />
             </SignedIn>
 
-						{/* Bug Report button */}
+            {/* Bug Report button */}
             <Button
               color="inherit"
               component="a"
