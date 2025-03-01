@@ -4,11 +4,7 @@
 case "$(uname -s)" in
     Linux*|Darwin*)
         echo "Mac/Linux detected. Running Unix setup..."
-        
-        # Check out dev branch
-        echo "Checking out dev branch..."
-        git checkout dev
-        
+
         # Create virtual environment
         echo "Creating Python virtual environment..."
         python3 -m venv venv
