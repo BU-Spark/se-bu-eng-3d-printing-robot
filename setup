@@ -33,10 +33,6 @@ case "$(uname -s)" in
     MINGW*|MSYS*|CYGWIN*|Windows*)
         echo "Windows detected. Running Windows setup..."
         
-        # Check out dev branch
-        echo "Checking out dev branch..."
-        git checkout dev
-        
         # Create virtual environment
         echo "Creating Python virtual environment..."
         python -m venv venv
