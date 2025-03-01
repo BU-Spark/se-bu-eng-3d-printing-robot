@@ -1,4 +1,4 @@
-# 3D Printing Robot Project
+# SP'25 Autonomous Mechanics Challenge
 
 ## Setup Instructions
 
