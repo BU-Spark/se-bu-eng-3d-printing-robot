@@ -1,5 +1,5 @@
 @echo off
-echo Windows setup script for 3D Printing Robot project
+echo Windows setup script
 
 REM Create Python virtual environment
 echo Creating Python virtual environment...
