@@ -20,7 +20,7 @@ Choose your operating system:
 
 2. **Run the setup script**
    ```bash
-   setup.bat
+   bash.bat
    ```
    
    This script will:
@@ -45,12 +45,12 @@ Choose your operating system:
    
    Make the script executable:
    ```bash
-   chmod +x setup.sh
+   chmod +x bash.sh
    ```
 
    Run the script:
    ```bash
-   ./setup.sh
+   ./bash.sh
    ```
    
    This script will:
