@@ -8,18 +8,28 @@ First, choose your preferred setup method:
 <summary><b>Quick Setup (Using Setup Scripts)</b></summary>
 
 Choose your operating system:
+First, choose your preferred setup method:
 
 <details>
+<summary><b>Quick Setup (Using Setup Scripts)</b></summary>
+
+Choose your operating system:
+
+<details>
+<summary><b>Windows</b></summary>
 <summary><b>Windows</b></summary>
 
 1. **Clone the repository**
    ```bash
    git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
    cd se-bu-eng-3d-printing-robot
    ```
 
 2. **Run the setup script**
+2. **Run the setup script**
    ```bash
+   bash.bat
    bash.bat
    ```
    
@@ -31,7 +41,26 @@ Choose your operating system:
 3. **Access the application**
    - Open your browser and go to [http://localhost:3000](http://localhost:3000)
 </details>
+   
+   This script will:
+   - Create and activate a Python virtual environment
+   - Install all dependencies
+   - Optionally start the development server
 
+3. **Access the application**
+   - Open your browser and go to [http://localhost:3000](http://localhost:3000)
+</details>
+
+<details>
+<summary><b>Mac/Linux</b></summary>
+
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   cd se-bu-eng-3d-printing-robot
+   ```
+
+2. **Run the setup script**
 <details>
 <summary><b>Mac/Linux</b></summary>
 
@@ -55,11 +84,15 @@ Choose your operating system:
    
    This script will:
    - Create and activate a Python virtual environment
+   - Create and activate a Python virtual environment
    - Install all dependencies
+   - Optionally start the development server
    - Optionally start the development server
 
 3. **Access the application**
+3. **Access the application**
    - Open your browser and go to [http://localhost:3000](http://localhost:3000)
+</details>
 </details>
 </details>
 
@@ -72,15 +105,25 @@ Choose your operating system:
 <summary><b>Windows</b></summary>
 
 1. **Clone the repository**
+Choose your operating system:
+
+<details>
+<summary><b>Windows</b></summary>
+
+1. **Clone the repository**
    ```bash
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
    git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
    cd se-bu-eng-3d-printing-robot
    ```
 
 2. **Create Virtual Environment**
+2. **Create Virtual Environment**
    ```bash
    python -m venv venv
    ```
+
+3. **Activate Virtual Environment**
 
 3. **Activate Virtual Environment**
    ```bash
@@ -106,11 +149,42 @@ Choose your operating system:
    - Open your browser and go to [http://localhost:3000](http://localhost:3000)
 
 8. **When finished, deactivate the virtual environment**
+
+4. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+5. **Configure environment variables**
+   - Look at the `.env.example` file in the project
+   - Create a new file named `.env` based on the example
+   - Fill in the required environment variables
+
+6. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+7. **Access the application**
+   - Open your browser and go to [http://localhost:3000](http://localhost:3000)
+
+8. **When finished, deactivate the virtual environment**
    ```bash
    deactivate
    ```
 </details>
+</details>
 
+<details>
+<summary><b>Mac/Linux</b></summary>
+
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   cd se-bu-eng-3d-printing-robot
+   ```
+
+2. **Create Virtual Environment**
 <details>
 <summary><b>Mac/Linux</b></summary>
 
@@ -124,6 +198,8 @@ Choose your operating system:
    ```bash
    python3 -m venv venv
    ```
+
+3. **Activate Virtual Environment**
 
 3. **Activate Virtual Environment**
    ```bash
@@ -147,6 +223,12 @@ Choose your operating system:
 
 7. **Access the application**
    - Open your browser and go to [http://localhost:3000](http://localhost:3000)
+
+8. **When finished, deactivate the virtual environment**
+   ```bash
+   deactivate
+   ```
+</details>
 
 8. **When finished, deactivate the virtual environment**
    ```bash
