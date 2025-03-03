@@ -1,59 +1,29 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Link from "next/link";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 
+// Components
+import NavBar from "../src/components/NavBar";
+
+// Metadata for the website
 export const metadata: Metadata = {
   title: "The Experimental Mechanics Challenge",
-  description:
-    "A website for interacting with, viewing, and managing of BEAR prints",
+  description: "A website for interacting with, viewing, and managing of BEAR prints",
   keywords: "3d printing, BEAR, leaderboard, Boston University, BU",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // URL for the bug report form
+  const bugReportFormURL = "https://forms.gle/9ghqYdbbX6YFXMJo8";
+
+  // BU Font - Whitney
+  const font = "Whitney SemiBold, sans-serif";
+
   return (
     <html lang="en">
-      <body>
+      <body style={{ margin: 0, padding: 0 }}>
         <ClerkProvider>
-          <header id="main-header">The Experimental Mechanics Challenge</header>
-          <div id="nav-bar">
-            <div id="sign-in">
-              <SignedOut>
-                <SignInButton />
-                <SignUpButton />
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </div>
-            <nav>
-              <ul>
-                <li>
-                  <Link href="/pages/account">Account</Link>
-                </li>
-                <li>
-                  <Link href="/pages/library">Library</Link>
-                </li>
-                <li>
-                  <Link href="/pages/bear-status">BEAR status</Link>
-                </li>
-                <li>
-                  <Link href="/pages/leaderboard">Leaderboards</Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
+          <NavBar bugReportFormURL={bugReportFormURL} font={font} />
           {children}
         </ClerkProvider>
       </body>
