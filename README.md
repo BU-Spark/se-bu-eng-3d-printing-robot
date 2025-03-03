@@ -2,102 +2,90 @@
 
 ## Setup Instructions
 
-You can set up this project either manually or by using our setup script.
+First, choose your preferred setup method:
 
 <details>
-<summary><b>Quick Setup (Using Setup Script)</b></summary>
+<summary><b>Quick Setup (Using Setup Scripts)</b></summary>
+
+Choose your operating system:
+
+<details>
+<summary><b>Windows</b></summary>
 
 1. **Clone the repository**
    ```bash
-   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git
-   ```
-
-2. **Navigate to the project directory**
-   ```bash
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
    cd se-bu-eng-3d-printing-robot
    ```
 
-3. **Run the setup script**
-   <details>
-   <summary><b>Windows</b></summary>
-   
+2. **Run the setup script**
    ```bash
-   ./setup
+   bash.bat
    ```
-   </details>
+   
+   This script will:
+   - Create and activate a Python virtual environment
+   - Install all dependencies
+   - Optionally start the development server
 
-   <details>
-   <summary><b>Mac/Linux</b></summary>
+3. **Access the application**
+   - Open your browser and go to [http://localhost:3000](http://localhost:3000)
+</details>
+
+<details>
+<summary><b>Mac/Linux</b></summary>
+
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   cd se-bu-eng-3d-printing-robot
+   ```
+
+2. **Run the setup script**
    
    Make the script executable:
    ```bash
-   chmod +x setup
+   chmod +x bash
    ```
 
    Run the script:
    ```bash
-   ./setup
+   ./bash
    ```
-   </details>
    
    This script will:
-   - Create and activate a virtual environment
+   - Create and activate a Python virtual environment
    - Install all dependencies
-   - Set up environment variables
-   - Start the development server
+   - Optionally start the development server
 
-4. **Access the application**
+3. **Access the application**
    - Open your browser and go to [http://localhost:3000](http://localhost:3000)
+</details>
 </details>
 
 <details>
 <summary><b>Manual Setup</b></summary>
 
-1. **Clone the repository and navigate to dev branch**
-   ```bash
-   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git
-   git checkout dev
-   ```
+Choose your operating system:
 
-2. **Navigate to the project directory**
+<details>
+<summary><b>Windows</b></summary>
+
+1. **Clone the repository**
    ```bash
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
    cd se-bu-eng-3d-printing-robot
    ```
 
-3. **Create Virtual Environment**
-   <details>
-   <summary><b>Windows</b></summary>
-   
-   To create:
+2. **Create Virtual Environment**
    ```bash
    python -m venv venv
    ```
-   To activate:
+
+3. **Activate Virtual Environment**
    ```bash
    venv\Scripts\activate
    ```
-   To close:
-   ```bash
-   deactivate
-   ```
-   </details>
-
-   <details>
-   <summary><b>Mac/Linux</b></summary>
-   
-   To create:
-   ```bash
-   python3 -m venv venv
-   ```
-   To activate:
-   ```bash
-   source venv/bin/activate
-   ```
-   To close:
-   ```bash
-   deactivate
-   ```
-   </details>
 
 4. **Install dependencies**
    ```bash
@@ -116,6 +104,55 @@ You can set up this project either manually or by using our setup script.
 
 7. **Access the application**
    - Open your browser and go to [http://localhost:3000](http://localhost:3000)
+
+8. **When finished, deactivate the virtual environment**
+   ```bash
+   deactivate
+   ```
+</details>
+
+<details>
+<summary><b>Mac/Linux</b></summary>
+
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   cd se-bu-eng-3d-printing-robot
+   ```
+
+2. **Create Virtual Environment**
+   ```bash
+   python3 -m venv venv
+   ```
+
+3. **Activate Virtual Environment**
+   ```bash
+   source venv/bin/activate
+   ```
+
+4. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+5. **Configure environment variables**
+   - Look at the `.env.example` file in the project
+   - Create a new file named `.env` based on the example
+   - Fill in the required environment variables
+
+6. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+7. **Access the application**
+   - Open your browser and go to [http://localhost:3000](http://localhost:3000)
+
+8. **When finished, deactivate the virtual environment**
+   ```bash
+   deactivate
+   ```
+</details>
 </details>
 
 ## Technologies
