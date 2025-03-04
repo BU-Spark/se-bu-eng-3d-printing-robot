@@ -14,7 +14,7 @@ Choose your operating system:
 
 1. **Clone the repository**
    ```bash
-   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   git clone https://github.com/BU-Spark/se-bu-eng-3d-printing-robot.git dev
    cd se-bu-eng-3d-printing-robot
    ```
 
@@ -37,7 +37,7 @@ Choose your operating system:
 
 1. **Clone the repository**
    ```bash
-   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   git clone https://github.com/BU-Spark/se-bu-eng-3d-printing-robot.git dev
    cd se-bu-eng-3d-printing-robot
    ```
 
@@ -73,7 +73,7 @@ Choose your operating system:
 
 1. **Clone the repository**
    ```bash
-   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   git clone https://github.com/BU-Spark/se-bu-eng-3d-printing-robot.git dev
    cd se-bu-eng-3d-printing-robot
    ```
 
@@ -116,7 +116,7 @@ Choose your operating system:
 
 1. **Clone the repository**
    ```bash
-   git clone git@github.com:BU-Spark/se-bu-eng-3d-printing-robot.git dev
+   git clone https://github.com/BU-Spark/se-bu-eng-3d-printing-robot.git dev
    cd se-bu-eng-3d-printing-robot
    ```
 
