@@ -136,8 +136,8 @@ export default function AccountPage() {
   const previousExperimentsData = [
     {
       id: 1,
-      latticeImage: "/images/lattice1.jpg",
-      fdCurve: "/images/curve1.jpg",
+      latticeImage: "/images/lattice.png",
+      fdCurve: "/images/curve.png",
       rank: 1,
       force: 0.84,
       unitCellType: "Octet",
@@ -150,8 +150,8 @@ export default function AccountPage() {
     },
     {
       id: 2,
-      latticeImage: "/images/lattice2.jpg",
-      fdCurve: "/images/curve2.jpg",
+      latticeImage: "/images/lattice.png",
+      fdCurve: "/images/curve.png",
       rank: 1,
       force: 0.83,
       unitCellType: "Octet",
@@ -164,8 +164,8 @@ export default function AccountPage() {
     },
     {
       id: 3,
-      latticeImage: "/images/lattice3.jpg",
-      fdCurve: "/images/curve3.jpg",
+      latticeImage: "/images/lattice.png",
+      fdCurve: "/images/curve.png",
       rank: 1,
       force: 0.81,
       unitCellType: "Octet",
@@ -701,7 +701,7 @@ export default function AccountPage() {
                 >
                   <Box 
                     component="img"
-                    src="/images/blue-structure.png"
+                    src="/images/3d-structure.png"
                     alt="3D Structure Visualization"
                     sx={{ maxWidth: '100%', maxHeight: '100%' }}
                   />

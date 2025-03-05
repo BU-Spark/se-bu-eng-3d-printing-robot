@@ -22,8 +22,8 @@ export default function LibraryPage() {
   const experimentData = [
     {
       id: 1,
-      latticeImage: "/images/lattice1.jpg",
-      fdFigure: "/images/fd1.jpg",
+      latticeImage: "/images/lattice.png",
+      fdFigure: "/images/curve.png",
       batch: 1,
       itId: "",
       unitCellType: "Octet",
@@ -37,8 +37,8 @@ export default function LibraryPage() {
     },
     {
       id: 2,
-      latticeImage: "/images/lattice2.jpg",
-      fdFigure: "/images/fd2.jpg",
+      latticeImage: "/images/lattice.png",
+      fdFigure: "/images/curve.png",
       batch: 1,
       itId: "166 178 171 221 204",
       unitCellType: "Octet",
@@ -52,8 +52,8 @@ export default function LibraryPage() {
     },
     {
       id: 3,
-      latticeImage: "/images/lattice3.jpg",
-      fdFigure: "/images/fd3.jpg",
+      latticeImage: "/images/lattice.png",
+      fdFigure: "/images/curve.png",
       batch: 1,
       itId: "",
       unitCellType: "Octet",
