@@ -3,7 +3,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 
 // Components
-import NavBar from "../src/components/NavBar";
+import NavBar from "../src/components/Navigation/NavBar";
 
 // Metadata for the website
 export const metadata: Metadata = {
