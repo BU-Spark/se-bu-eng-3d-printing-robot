@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 
 export default function BearStatusPage() {
-  // In a real application, you would fetch this data from an API
   const [isRunning, setIsRunning] = useState(true);
   const [jobsInQueue, setJobsInQueue] = useState(8);
   const [avgCompletionTime, setAvgCompletionTime] = useState(75);

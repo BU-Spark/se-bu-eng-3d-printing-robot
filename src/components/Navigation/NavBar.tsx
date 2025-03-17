@@ -45,7 +45,7 @@ const appBarStyles: CSSProperties = {
   color: colorScheme.secondary,
   padding: 0,
   margin: 0,
-  fontFamily: "font",
+  fontFamily: "Whitney SemiBold, sans-serif",
 };
 
 const ToolbarStyles: CSSProperties = {
