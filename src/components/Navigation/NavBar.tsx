@@ -48,14 +48,6 @@ const appBarStyles: CSSProperties = {
   fontFamily: "Whitney SemiBold, sans-serif",
 };
 
-const ToolbarStyles: CSSProperties = {
-  padding: 0,
-  margin: 0,
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
-
 const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
   // Button styles
   const buttonStyle: CSSProperties = {
@@ -74,75 +66,123 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
 
   return (
     <AppBar position="static" sx={appBarStyles}>
-      <Toolbar sx={ToolbarStyles}>
+      <Toolbar 
+        sx={{
+          padding: 0,
+          margin: 0,
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: { xs: 1, md: 0 },
+          py: { xs: 1, md: 0 }
+        }}
+      >
         <Typography
           variant="h6"
           component="div"
-          sx={{ ml: 2, fontFamily: font }}
+          sx={{ 
+            ml: { xs: 0, md: 2 }, 
+            fontFamily: font, 
+            textAlign: { xs: "center", md: "left" },
+            mb: { xs: 0, md: 0 }
+          }}
         >
           The Experimental Mechanics Challenge
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          {/* Navigation buttons - Account */}
-          <Button
-            color="inherit"
-            component={Link}
-            href="/pages/account"
-            sx={{
-              ...buttonStyle,
-              "&:hover": buttonHoverStyle,
-              mr: 1,
+        <Box 
+          sx={{ 
+            display: "flex", 
+            alignItems: "center",
+            flexDirection: "row", // Always keep buttons in a row
+            width: { xs: "100%", md: "auto" },
+            justifyContent: { xs: "center", md: "flex-end" },
+          }}
+        >
+          {/* Navigation buttons wrapper */}
+          <Box 
+            sx={{ 
+              display: "flex", 
+              flexDirection: "row",
+              flexWrap: "nowrap", // Never wrap buttons
+              justifyContent: { xs: "flex-start", md: "flex-start" },
+              minWidth: { xs: "max-content", md: "auto" }, // Ensure buttons don't shrink
             }}
           >
-            <AccountCircle />
-            Account
-          </Button>
-          {/* Navigation buttons - Library */}
-          <Button
-            color="inherit"
-            component={Link}
-            href="/pages/library"
-            sx={{
-              ...buttonStyle,
-              "&:hover": buttonHoverStyle,
-              mr: 1,
-            }}
-          >
-            <Library />
-            Library
-          </Button>
-          {/* Navigation buttons - BEAR Status */}
-          <Button
-            color="inherit"
-            component={Link}
-            href="/pages/bear-status"
-            sx={{
-              ...buttonStyle,
-              "&:hover": buttonHoverStyle,
-              mr: 1,
-            }}
-          >
-            <QueryStatsIcon />
-            BEAR status
-          </Button>
-          {/* Navigation buttons - Leaderboard */}
-          <Button
-            color="inherit"
-            component={Link}
-            href="/pages/leaderboard"
-            sx={{
-              ...buttonStyle,
-              "&:hover": buttonHoverStyle,
-              mr: 1,
-            }}
-          >
-            <Leaderboard />
-            Leaderboards
-          </Button>
+            {/* Navigation buttons - Account */}
+            <Button
+              color="inherit"
+              component={Link}
+              href="/pages/account"
+              sx={{
+                ...buttonStyle,
+                "&:hover": buttonHoverStyle,
+                mr: { xs: 1, md: 1 },
+                fontSize: { xs: "0.75rem", md: "0.8rem" } // Shrink font size on small screens
+              }}
+            >
+              <AccountCircle />
+              Account
+            </Button>
+            {/* Navigation buttons - Library */}
+            <Button
+              color="inherit"
+              component={Link}
+              href="/pages/library"
+              sx={{
+                ...buttonStyle,
+                "&:hover": buttonHoverStyle,
+                mr: { xs: 1, md: 1 },
+                fontSize: { xs: "0.75rem", md: "0.8rem" }
+              }}
+            >
+              <Library />
+              Library
+            </Button>
+            {/* Navigation buttons - BEAR Status */}
+            <Button
+              color="inherit"
+              component={Link}
+              href="/pages/bear-status"
+              sx={{
+                ...buttonStyle,
+                "&:hover": buttonHoverStyle,
+                mr: { xs: 1, md: 1 },
+                fontSize: { xs: "0.75rem", md: "0.8rem" }
+              }}
+            >
+              <QueryStatsIcon />
+              BEAR status
+            </Button>
+            {/* Navigation buttons - Leaderboard */}
+            <Button
+              color="inherit"
+              component={Link}
+              href="/pages/leaderboard"
+              sx={{
+                ...buttonStyle,
+                "&:hover": buttonHoverStyle,
+                mr: { xs: 1, md: 1 },
+                fontSize: { xs: "0.75rem", md: "0.8rem" }
+              }}
+            >
+              <Leaderboard />
+              Leaderboards
+            </Button>
+          </Box>
 
           {/* Sign In, Sign Up, and Bug Report buttons */}
-          <Box sx={{ ml: 2, display: "flex", gap: 1 }}>
+          <Box 
+            sx={{ 
+              ml: { xs: 0, md: 2 }, 
+              mt: { xs: 0, md: 0 },
+              display: "flex", 
+              gap: 0.5,
+              justifyContent: "center",
+              minWidth: "max-content"
+            }}
+          >
             <SignedOut>
               {/* Sign In button */}
               <SignInButton mode="modal">
@@ -165,7 +205,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
             </SignedIn>
 
             {/* Bug Report button */}
-            <Button
+            {/* <Button
               color="inherit"
               component="a"
               href={bugReportFormURL}
@@ -180,7 +220,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
               }}
             >
               <BugReportIcon />
-            </Button>
+            </Button> */}
           </Box>
         </Box>
       </Toolbar>
