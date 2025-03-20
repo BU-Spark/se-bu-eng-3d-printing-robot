@@ -55,7 +55,7 @@ function getAffiliationFromEmail(email: string | undefined): string {
 		// Add more mappings as needed
 	};
 	
-	return domainMap[domain] || domain;
+	return domainMap[domain] || "No Affiliation Detected";
 }
 
 export default function InfoTab({ user, session }: any) {
