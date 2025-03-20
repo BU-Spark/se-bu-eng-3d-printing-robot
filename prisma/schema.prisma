@@ -1,14 +1,79 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model bear_inprogress {
+  RequestID Int?
+  Status    Int?
+
+  @@ignore
+}
+
+model bear_instron {
+  UniqueID          Int    @id @default(autoincrement())
+  ID                Int?
+  Time              Float? @db.Float
+  Displacement      Float? @db.Float
+  PlattenSeparation Float? @db.Float
+  F                 Float? @db.Float
+}
+
+model bear_requests {
+  RequestID     Int    @id
+  TargetMass    Float? @db.Float
+  TargetHeight  Float? @db.Float
+  WallThickness Float? @db.Float
+  x1            Float? @db.Float
+  x2            Float? @db.Float
+  x3            Float? @db.Float
+  x4            Float? @db.Float
+  x5            Float? @db.Float
+  x6            Float? @db.Float
+  x7            Float? @db.Float
+  x8            Float? @db.Float
+}
+
+model bear_tests {
+  ID_Number           Int?
+  Request_ID          Int      @id
+  Valid               Int?
+  TargetMass          Decimal? @db.Decimal(10, 6)
+  TargetHeight        Decimal? @db.Decimal(38, 16)
+  WallThickness       Decimal? @db.Decimal(10, 6)
+  x1                  Decimal? @db.Decimal(38, 16)
+  x2                  Decimal? @db.Decimal(38, 16)
+  x3                  Decimal? @db.Decimal(38, 16)
+  x4                  Decimal? @db.Decimal(38, 16)
+  x5                  Decimal? @db.Decimal(38, 16)
+  x6                  Decimal? @db.Decimal(38, 16)
+  x7                  Decimal? @db.Decimal(38, 16)
+  x8                  Decimal? @db.Decimal(38, 16)
+  Toughness           Decimal? @db.Decimal(38, 16)
+  RecordedMass        Decimal? @db.Decimal(10, 5)
+  Modulus             Decimal? @db.Decimal(38, 16)
+  PlateauStrength     Decimal? @db.Decimal(38, 16)
+  CriticalEfficiency  Decimal? @db.Decimal(38, 16)
+  CriticalStress      Decimal? @db.Decimal(38, 16)
+  FilamentID          Int?
+  MaxRadius           Decimal? @db.Decimal(38, 16)
+  EffectiveArea       Decimal? @db.Decimal(38, 16)
+  RecordedHeight      Decimal? @db.Decimal(38, 16)
+  DensificationStrain Decimal? @db.Decimal(38, 16)
+  MaxDisplacement     Decimal? @db.Decimal(38, 16)
+  Printable           Decimal? @db.Decimal(38, 16)
+  PrinterNumber       Decimal? @db.Decimal(38, 16)
+  PrinterNozzle       Int?
+  NozzleSize          Decimal? @db.Decimal(3, 2)
+  ExtrusionMultiplier Decimal? @db.Decimal(3, 2)
+  DecisionPolicy      Decimal? @db.Decimal(38, 16)
+  TimePrintStarted    Decimal? @db.Decimal(38, 16)
+  TimeInstronCrushed  Decimal? @db.Decimal(38, 16)
+  AveragePerimeter    Decimal? @db.Decimal(38, 16)
+  WallAngle           Decimal? @db.Decimal(38, 16)
 }
