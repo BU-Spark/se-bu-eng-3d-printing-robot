@@ -1,12 +1,12 @@
 // app/api/leaderboard/route.ts
-import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const page = Number(searchParams.get('page')) || 1;
+  const page = Number(searchParams.get("page")) || 1;
 
   try {
     const leaderboardData = await prisma.$queryRaw`
@@ -29,7 +29,10 @@ export async function GET(request: Request) {
 
     return NextResponse.json(leaderboardData);
   } catch (error) {
-    console.error('Error fetching leaderboard data:', error);
-    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
+    console.error("Error fetching leaderboard data:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch data" },
+      { status: 500 },
+    );
   }
 }

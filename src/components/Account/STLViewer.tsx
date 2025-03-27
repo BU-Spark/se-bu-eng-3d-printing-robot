@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+/* eslint-disable react/no-unknown-property */
+import React, { useEffect, useState } from "react";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
@@ -18,7 +19,8 @@ const STLViewer = ({ stlUrl }: { stlUrl: string | null }) => {
     try {
       setIsLoading(true);
       const response = await fetch(url);
-      if (!response.ok) throw new Error(`Failed to load STL: ${response.statusText}`);
+      if (!response.ok)
+        throw new Error(`Failed to load STL: ${response.statusText}`);
 
       const arrayBuffer = await response.arrayBuffer();
       if (!arrayBuffer || arrayBuffer.byteLength === 0) {
@@ -39,10 +41,20 @@ const STLViewer = ({ stlUrl }: { stlUrl: string | null }) => {
     <Canvas>
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} intensity={0.8} />
-      <spotLight position={[-10, -10, -10]} angle={0.15} penumbra={1} intensity={1} />
+      <spotLight
+        position={[-10, -10, -10]}
+        angle={0.15}
+        penumbra={1}
+        intensity={1}
+      />
 
       {/* OrbitControls with autoRotate */}
-      <OrbitControls autoRotate autoRotateSpeed={1} enableDamping dampingFactor={0.1} />
+      <OrbitControls
+        autoRotate
+        autoRotateSpeed={1}
+        enableDamping
+        dampingFactor={0.1}
+      />
 
       {isLoading ? (
         <mesh>

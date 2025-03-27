@@ -73,7 +73,9 @@ export default function AccountPage() {
   if (!user) {
     return (
       <Box sx={containerStyle}>
-        <Typography variant="h6">Please sign in to view your account.</Typography>
+        <Typography variant="h6">
+          Please sign in to view your account.
+        </Typography>
       </Box>
     );
   }
@@ -98,7 +100,7 @@ export default function AccountPage() {
           textColor="inherit"
           TabIndicatorProps={{
             style: {
-              backgroundColor: "#CC0000", 
+              backgroundColor: "#CC0000",
             },
           }}
         >
@@ -107,7 +109,7 @@ export default function AccountPage() {
             sx={{
               color: "#CC0000",
               "&.Mui-selected": {
-                color: "#CC0000", 
+                color: "#CC0000",
               },
             }}
           />

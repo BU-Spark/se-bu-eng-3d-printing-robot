@@ -22,7 +22,7 @@ import Leaderboard from "@mui/icons-material/Leaderboard";
 import { CSSProperties } from "react";
 
 // Clerk button styles
-import './ClerkButtonStyles.css';
+import "./ClerkButtonStyles.css";
 
 // Props for the NavBar component
 interface NavBarProps {
@@ -66,7 +66,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
 
   return (
     <AppBar position="static" sx={appBarStyles}>
-      <Toolbar 
+      <Toolbar
         sx={{
           padding: 0,
           margin: 0,
@@ -75,25 +75,25 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
           justifyContent: "space-between",
           alignItems: "center",
           gap: { xs: 1, md: 0 },
-          py: { xs: 1, md: 0 }
+          py: { xs: 1, md: 0 },
         }}
       >
         <Typography
           variant="h6"
           component="div"
-          sx={{ 
-            ml: { xs: 0, md: 2 }, 
-            fontFamily: font, 
+          sx={{
+            ml: { xs: 0, md: 2 },
+            fontFamily: font,
             textAlign: { xs: "center", md: "left" },
-            mb: { xs: 0, md: 0 }
+            mb: { xs: 0, md: 0 },
           }}
         >
           The Experimental Mechanics Challenge
         </Typography>
 
-        <Box 
-          sx={{ 
-            display: "flex", 
+        <Box
+          sx={{
+            display: "flex",
             alignItems: "center",
             flexDirection: "row", // Always keep buttons in a row
             width: { xs: "100%", md: "auto" },
@@ -101,9 +101,9 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
           }}
         >
           {/* Navigation buttons wrapper */}
-          <Box 
-            sx={{ 
-              display: "flex", 
+          <Box
+            sx={{
+              display: "flex",
               flexDirection: "row",
               flexWrap: "nowrap", // Never wrap buttons
               justifyContent: { xs: "flex-start", md: "flex-start" },
@@ -119,7 +119,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                 ...buttonStyle,
                 "&:hover": buttonHoverStyle,
                 mr: { xs: 1, md: 1 },
-                fontSize: { xs: "0.75rem", md: "0.8rem" } // Shrink font size on small screens
+                fontSize: { xs: "0.75rem", md: "0.8rem" }, // Shrink font size on small screens
               }}
             >
               <AccountCircle />
@@ -134,7 +134,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                 ...buttonStyle,
                 "&:hover": buttonHoverStyle,
                 mr: { xs: 1, md: 1 },
-                fontSize: { xs: "0.75rem", md: "0.8rem" }
+                fontSize: { xs: "0.75rem", md: "0.8rem" },
               }}
             >
               <Library />
@@ -149,7 +149,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                 ...buttonStyle,
                 "&:hover": buttonHoverStyle,
                 mr: { xs: 1, md: 1 },
-                fontSize: { xs: "0.75rem", md: "0.8rem" }
+                fontSize: { xs: "0.75rem", md: "0.8rem" },
               }}
             >
               <QueryStatsIcon />
@@ -164,7 +164,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                 ...buttonStyle,
                 "&:hover": buttonHoverStyle,
                 mr: { xs: 1, md: 1 },
-                fontSize: { xs: "0.75rem", md: "0.8rem" }
+                fontSize: { xs: "0.75rem", md: "0.8rem" },
               }}
             >
               <Leaderboard />
@@ -173,14 +173,14 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
           </Box>
 
           {/* Sign In, Sign Up, and Bug Report buttons */}
-          <Box 
-            sx={{ 
-              ml: { xs: 0, md: 2 }, 
+          <Box
+            sx={{
+              ml: { xs: 0, md: 2 },
               mt: { xs: 0, md: 0 },
-              display: "flex", 
+              display: "flex",
               gap: 0.5,
               justifyContent: "center",
-              minWidth: "max-content"
+              minWidth: "max-content",
             }}
           >
             <SignedOut>
@@ -190,7 +190,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                   Login
                 </button>
               </SignInButton>
-              
+
               {/* Sign Up button */}
               <SignUpButton mode="modal">
                 <button className="clerk-button" style={{ fontFamily: font }}>
