@@ -6,9 +6,9 @@ import { useState } from "react";
 import { Box, Typography, Paper } from "@mui/material";
 
 export default function BearStatusPage() {
-  const [isRunning, setIsRunning] = useState(true);
-  const [jobsInQueue, setJobsInQueue] = useState(8);
-  const [avgCompletionTime, setAvgCompletionTime] = useState(75);
+  const [isRunning, _setIsRunning] = useState(true);
+  const [jobsInQueue, _setJobsInQueue] = useState(8);
+  const [avgCompletionTime, _setAvgCompletionTime] = useState(75);
 
   return (
     <Box sx={{ p: 4, maxWidth: "1200px", mx: "auto" }}>
