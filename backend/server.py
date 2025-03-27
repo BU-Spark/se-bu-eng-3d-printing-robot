@@ -22,6 +22,10 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
+@app.get("/")
+def health_check():
+    return {"status": "healthy"}
+
 # This is the endpoint to generate the STL file
 # Example URL:
 # http://127.0.0.1:8000/generate-stl/?c4BaseFace=0.85&c4TopFace=0.6&c8BaseFace=0&c8TopFace=0&linearTwist=3.1415&oscillatingTwistAmplitude=0&oscillatingTwistCycles=0&topToBasePerimeterRatio=2&height=20&mass=3&wallThickness=0.7
