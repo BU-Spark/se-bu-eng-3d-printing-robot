@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 // Downloading Files
-import JSZip from "jszip";  
-import { saveAs } from "file-saver";  
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 // For throttling API calls
 import { set, throttle } from "lodash";
@@ -14,16 +14,24 @@ import STLViewer from "@/src/components/Account/STLViewer";
 import { designMetadata } from "@/src/metadata/design";
 
 // Material-UI components
-import { 
-  TextField, Typography, Grid,
-  Button, Slider, MenuItem, Box,
-  Dialog, DialogActions, DialogContent,
-  DialogContentText, DialogTitle
+import {
+  TextField,
+  Typography,
+  Grid,
+  Button,
+  Slider,
+  MenuItem,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 
 // Material-UI icons
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 /**********************************************************************************/
 // Define interface for design state
@@ -36,12 +44,12 @@ export default function NewExpTab() {
   const [designState, setDesignState] = useState<DesignState>(
     Object.keys(designMetadata).reduce((acc: DesignState, key: string) => {
       const metadata = designMetadata[key];
-      acc[key] = metadata.defaultValue ?? '';
+      acc[key] = metadata.defaultValue ?? "";
       return acc;
-    }, {})
-  );	
+    }, {}),
+  );
 
-	/**********************************************************************************/
+  /**********************************************************************************/
   const [stlUrl, setStlUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -49,32 +57,36 @@ export default function NewExpTab() {
     try {
       const { material, ...paramsWithoutMaterial } = debouncedState;
       const params = new URLSearchParams(
-        Object.entries(paramsWithoutMaterial).reduce((acc: { [key: string]: string }, [key, value]) => {
-          acc[key] = String(value); 
-          return acc;
-        }, {})
+        Object.entries(paramsWithoutMaterial).reduce(
+          (acc: { [key: string]: string }, [key, value]) => {
+            acc[key] = String(value);
+            return acc;
+          },
+          {},
+        ),
       );
-      
-      const response = await fetch(`http://127.0.0.1:8000/generate-stl/?${params.toString()}`);
-      
+
+      const response = await fetch(
+        `http://127.0.0.1:8000/generate-stl/?${params.toString()}`,
+      );
+
       // If the response is not OK or not an STL file
       if (!response.ok) {
         const errorData = await response.json();
         setErrorMessage(errorData.error || "Invalid STL file received");
-        setStlUrl(null);  // Clear the 3D model viewer
+        setStlUrl(null); // Clear the 3D model viewer
         return;
       }
-  
+
       const blob = await response.blob();
       setStlUrl(URL.createObjectURL(blob));
-      setErrorMessage(null);  // Clear the error message on success
+      setErrorMessage(null); // Clear the error message on success
     } catch (error) {
       console.error("Error fetching STL:", error);
-      setStlUrl(null);  // Clear the 3D model viewer
-      setErrorMessage((error as any).message);  // Set the error message
+      setStlUrl(null); // Clear the 3D model viewer
+      setErrorMessage((error as any).message); // Set the error message
     }
-  }, 300);  
-
+  }, 300);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -123,86 +135,86 @@ export default function NewExpTab() {
 
     setDesignState((prev) => {
       const newState = { ...prev, [key]: value };
-      generateSTLThrottled(newState); 
+      generateSTLThrottled(newState);
       return newState;
     });
   };
-  
-	const handleTextFieldChange = (key: string, value: string) => {
+
+  const handleTextFieldChange = (key: string, value: string) => {
     setCsvError(null);
 
-		const metadata = designMetadata[key];
-	
-		// Allow empty input for deletion
-		if (value === "") {
-			setDesignState((prev) => ({ ...prev, [key]: value }));
-			return;
-		}
-	
-		// Determine if negative numbers are allowed
-		const allowNegative = (metadata.min ?? 0) < 0;
-		const regex = allowNegative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
-	
-		// Ensure valid numeric input
-		if (!regex.test(value)) return;
-	
-		// Handle cases where user starts with "."
-		if (value === ".") {
-			value = "0.";
-		} else if (value === "-.") {
-			value = "-0.";
-		}
-	
-		// Convert to number and enforce min/max **while typing**
-		let numericValue = Number(value);
-		if (numericValue < (metadata.min ?? -Infinity)) {
-			numericValue = metadata.min!;
-		}
-		if (numericValue > (metadata.max ?? Infinity)) {
-			numericValue = metadata.max!;
-		}
+    const metadata = designMetadata[key];
+
+    // Allow empty input for deletion
+    if (value === "") {
+      setDesignState((prev) => ({ ...prev, [key]: value }));
+      return;
+    }
+
+    // Determine if negative numbers are allowed
+    const allowNegative = (metadata.min ?? 0) < 0;
+    const regex = allowNegative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
+
+    // Ensure valid numeric input
+    if (!regex.test(value)) return;
+
+    // Handle cases where user starts with "."
+    if (value === ".") {
+      value = "0.";
+    } else if (value === "-.") {
+      value = "-0.";
+    }
+
+    // Convert to number and enforce min/max **while typing**
+    let numericValue = Number(value);
+    if (numericValue < (metadata.min ?? -Infinity)) {
+      numericValue = metadata.min!;
+    }
+    if (numericValue > (metadata.max ?? Infinity)) {
+      numericValue = metadata.max!;
+    }
 
     setDesignState((prev) => {
       const newState = { ...prev, [key]: numericValue };
       generateSTLThrottled(newState); // Trigger the throttled API call
       return newState;
     });
-	};
-	
-	const handleTextFieldBlur = (key: string) => {
-		setDesignState((prev) => {
-			let value = prev[key];
-	
-			// Get min value from metadata
-			const metadata = designMetadata[key];
-			const minValue = metadata.min ?? 0;
-	
-			// If empty, reset to min value
-			if (value === "") {
-				return { ...prev, [key]: minValue };
-			}
-	
-			// If ends with '.', '-.', append '0'
-			if (typeof value === "string" && value.match(/^-?\d+\.$/)) {
-				value += "0";
-			}
-	
-			let numericValue = Number(value);
-	
-			// Enforce min/max **on blur**
-			if (numericValue < minValue) {
-				numericValue = minValue;
-			}
-			if (numericValue > (metadata.max ?? Infinity)) {
-				numericValue = metadata.max!;
-			}
-	
+  };
+
+  const handleTextFieldBlur = (key: string) => {
+    setDesignState((prev) => {
+      let value = prev[key];
+
+      // Get min value from metadata
+      const metadata = designMetadata[key];
+      const minValue = metadata.min ?? 0;
+
+      // If empty, reset to min value
+      if (value === "") {
+        return { ...prev, [key]: minValue };
+      }
+
+      // If ends with '.', '-.', append '0'
+      if (typeof value === "string" && value.match(/^-?\d+\.$/)) {
+        value += "0";
+      }
+
+      let numericValue = Number(value);
+
+      // Enforce min/max **on blur**
+      if (numericValue < minValue) {
+        numericValue = minValue;
+      }
+      if (numericValue > (metadata.max ?? Infinity)) {
+        numericValue = metadata.max!;
+      }
+
       const newState = { ...prev, [key]: numericValue };
       generateSTLThrottled(newState); // Trigger the throttled API call
       return newState;
-		});
-	};	
-	
+    });
+  };
+
   const handleMaterialChange = (value: string) => {
     setDesignState((prev) => ({ ...prev, material: value }));
   };
@@ -211,40 +223,46 @@ export default function NewExpTab() {
   const [csvError, setCsvError] = useState<string | null>(null);
   const handleCSVUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    
+
     if (file && file.type === "text/csv") {
       const reader = new FileReader();
-      
+
       reader.onload = (event) => {
         const content = event.target?.result as string;
         const rows = content.trim().split("\n");
-  
+
         // Make sure the CSV has the right number of rows and format
         if (rows.length < 2) {
           setCsvError("CSV is empty or doesn't contain valid data.");
           return;
         }
-  
+
         const headers = rows[0].split(",");
-        if (headers.length !== 2 || headers[0].trim() !== "Parameter" || headers[1].trim() !== "Value") {
-          setCsvError("Invalid CSV format. Ensure the first row has 'Parameter,Value' headers.");
+        if (
+          headers.length !== 2 ||
+          headers[0].trim() !== "Parameter" ||
+          headers[1].trim() !== "Value"
+        ) {
+          setCsvError(
+            "Invalid CSV format. Ensure the first row has 'Parameter,Value' headers.",
+          );
           return;
         }
-  
+
         const newState: DesignState = { ...designState };
         let isValid = true;
-  
+
         rows.slice(1).forEach((row) => {
           const [key, value] = row.split(",");
-          
+
           if (!key || !value) {
             isValid = false;
             return; // Skip invalid rows
           }
-  
+
           const trimmedKey = key.trim();
           const trimmedValue = value.trim();
-  
+
           // Check if the parameter exists in designMetadata
           if (designMetadata[trimmedKey]) {
             newState[trimmedKey] = parseFloat(trimmedValue);
@@ -252,33 +270,39 @@ export default function NewExpTab() {
             isValid = false;
           }
         });
-  
+
         if (!isValid) {
           setCsvError("CSV contains invalid parameters or values.");
           return;
         }
-  
+
         // Update the state and re-render the model
         setDesignState(newState);
         generateSTLThrottled(newState); // Re-render model with new params
         setCsvError(null); // Clear any previous errors
       };
-      
+
       reader.readAsText(file);
     } else {
       setCsvError("Please upload a valid CSV file.");
     }
-  };  
-	/**********************************************************************************/
+  };
+  /**********************************************************************************/
 
   return (
-    <Box sx={{ maxWidth: '1000px', width: '100%' }}>
+    <Box sx={{ maxWidth: "1000px", width: "100%" }}>
       <Typography variant="h5" gutterBottom align="center">
         Forward Design Dashboard
       </Typography>
 
-      <Typography variant="subtitle1" gutterBottom align="center" sx={{ mb: 3 }}>
-        Interactively create and visualize GCS and observe their predicted performance.
+      <Typography
+        variant="subtitle1"
+        gutterBottom
+        align="center"
+        sx={{ mb: 3 }}
+      >
+        Interactively create and visualize GCS and observe their predicted
+        performance.
       </Typography>
 
       <Grid container spacing={3}>
@@ -303,35 +327,35 @@ export default function NewExpTab() {
                     onChange={(e) => handleMaterialChange(e.target.value)}
                     size="medium"
                     sx={{
-                      '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                          borderColor: '#CC0000', 
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "#CC0000",
                         },
-                        '&:hover fieldset': {
-                          borderColor: '#AA0000',
+                        "&:hover fieldset": {
+                          borderColor: "#AA0000",
                         },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#CC0000',
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#CC0000",
                         },
                       },
-                      '& .MuiSelect-select': {
-                        backgroundColor: '#F9F9F9', 
+                      "& .MuiSelect-select": {
+                        backgroundColor: "#F9F9F9",
                       },
                     }}
                   >
                     {metadata.options.map((option) => (
-                      <MenuItem 
-                        key={option} 
+                      <MenuItem
+                        key={option}
                         value={option}
                         sx={{
-                          '&:hover': {
-                            backgroundColor: '#FFE5E5',
+                          "&:hover": {
+                            backgroundColor: "#FFE5E5",
                           },
-                          '&.Mui-selected': {
-                            backgroundColor: '#CC0000',
-                            color: '#FFFFFF',        
-                            '&:hover': {
-                              backgroundColor: '#CC0000', 
+                          "&.Mui-selected": {
+                            backgroundColor: "#CC0000",
+                            color: "#FFFFFF",
+                            "&:hover": {
+                              backgroundColor: "#CC0000",
                             },
                           },
                         }}
@@ -347,42 +371,45 @@ export default function NewExpTab() {
               return (
                 <Box key={key} sx={{ mb: 2 }}>
                   <Typography variant="body2">{metadata.label}:</Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Slider 
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Slider
                       value={designState[key] as number}
-                      onChange={(e, newValue) => handleSliderChange(key, newValue as number)}
-                      min={metadata.min} 
-                      max={metadata.max} 
-                      step={metadata.step} 
+                      onChange={(e, newValue) =>
+                        handleSliderChange(key, newValue as number)
+                      }
+                      min={metadata.min}
+                      max={metadata.max}
+                      step={metadata.step}
                       sx={{
                         flexGrow: 1,
-                        color: '#CC0000', 
-                        '& .MuiSlider-thumb': {
-                          backgroundColor: '#CC0000', 
+                        color: "#CC0000",
+                        "& .MuiSlider-thumb": {
+                          backgroundColor: "#CC0000",
                         },
-                        '& .MuiSlider-track': {
-                          backgroundColor: '#CC0000', 
+                        "& .MuiSlider-track": {
+                          backgroundColor: "#CC0000",
                         },
-                        '& .MuiSlider-rail': {
-                          backgroundColor: '#CC0000', 
+                        "& .MuiSlider-rail": {
+                          backgroundColor: "#CC0000",
                         },
                       }}
                     />
-                    <TextField 
-                      size="small" 
+                    <TextField
+                      size="small"
                       value={designState[key] as string}
-                      onChange={(e) => handleTextFieldChange(key, e.target.value)}
-											onBlur={() => handleTextFieldBlur(key)}
+                      onChange={(e) =>
+                        handleTextFieldChange(key, e.target.value)
+                      }
+                      onBlur={() => handleTextFieldBlur(key)}
                       sx={{
-                        width: '80px',
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': { borderColor: '#CC0000' },
-                          '&:hover fieldset': { borderColor: '#AA0000' },
-                          '&.Mui-focused fieldset': { borderColor: '#CC0000' },
+                        width: "80px",
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": { borderColor: "#CC0000" },
+                          "&:hover fieldset": { borderColor: "#AA0000" },
+                          "&.Mui-focused fieldset": { borderColor: "#CC0000" },
                         },
-                        '& .MuiSelect-select': { backgroundColor: '#F9F9F9' },
+                        "& .MuiSelect-select": { backgroundColor: "#F9F9F9" },
                       }}
-                      
                     />
                   </Box>
                 </Box>
@@ -393,23 +420,25 @@ export default function NewExpTab() {
 
         {/* Right panel - Design visualization (expanded) */}
         <Grid item xs={12} md={8}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+          >
             <Typography variant="h6" gutterBottom>
               Design
             </Typography>
-            <Box 
-              sx={{ 
+            <Box
+              sx={{
                 flexGrow: 1,
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center',
-                border: '1px solid #eee',
-                borderRadius: '4px',
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid #eee",
+                borderRadius: "4px",
                 mb: 2,
-                minHeight: '400px'
+                minHeight: "400px",
               }}
             >
-              {(csvError || errorMessage) ? (
+              {csvError || errorMessage ? (
                 <Typography variant="h5" color="error" align="center">
                   {csvError || errorMessage}
                 </Typography>
@@ -421,39 +450,45 @@ export default function NewExpTab() {
             </Box>
 
             {/* Control buttons */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button 
-                  variant="contained" 
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Button
+                  variant="contained"
                   component="label"
-                  size="small" 
+                  size="small"
                   sx={{
-                    minWidth: '40px',
-                    backgroundColor: '#CC0000', 
-                    color: '#FFFFFF',        
-                    '&:hover': {
-                      backgroundColor: '#AA0000', 
+                    minWidth: "40px",
+                    backgroundColor: "#CC0000",
+                    color: "#FFFFFF",
+                    "&:hover": {
+                      backgroundColor: "#AA0000",
                     },
                   }}
                 >
                   <FileUploadIcon />
-                  <input 
-                    type="file" 
-                    accept=".csv" 
-                    style={{ display: 'none' }}
+                  <input
+                    type="file"
+                    accept=".csv"
+                    style={{ display: "none" }}
                     onChange={handleCSVUpload}
                   />
                 </Button>
-                <Button 
-                  variant="contained" 
-                  size="small" 
+                <Button
+                  variant="contained"
+                  size="small"
                   onClick={handleOpenDialog}
                   sx={{
-                    minWidth: '40px',
-                    backgroundColor: '#CC0000',
-                    color: '#FFFFFF',
-                    '&:hover': {
-                      backgroundColor: '#AA0000',
+                    minWidth: "40px",
+                    backgroundColor: "#CC0000",
+                    color: "#FFFFFF",
+                    "&:hover": {
+                      backgroundColor: "#AA0000",
                     },
                   }}
                 >
@@ -462,13 +497,13 @@ export default function NewExpTab() {
               </Box>
 
               {/* Submit button */}
-              <Button 
+              <Button
                 variant="contained"
                 sx={{
-                  backgroundColor: '#CC0000',
-                  color: '#FFFFFF',
-                  '&:hover': {
-                    backgroundColor: '#AA0000',
+                  backgroundColor: "#CC0000",
+                  color: "#FFFFFF",
+                  "&:hover": {
+                    backgroundColor: "#AA0000",
                   },
                 }}
               >
