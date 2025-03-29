@@ -133,4 +133,4 @@ dist
 /.clerk/
 
 # .STL files
-.stl
+*.stl
