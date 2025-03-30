@@ -65,7 +65,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
   };
 
   return (
-    <AppBar position="static" sx={appBarStyles}>
+    <AppBar position="fixed" sx={appBarStyles}>
       <Toolbar
         sx={{
           padding: 0,

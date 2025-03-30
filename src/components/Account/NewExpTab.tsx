@@ -66,9 +66,18 @@ export default function NewExpTab() {
         ),
       );
 
+      // Toggle Backend URL based on environment
+      // Use local backend during development
+      // Use production backend in production
+      const BASE_URL =
+        process.env.NODE_ENV === "development"
+          ? "http://127.0.0.1:8000" // Local backend during development
+          : process.env.NEXT_PUBLIC_BACKEND_URL; // Production backend
+
       const response = await fetch(
-        `http://127.0.0.1:8000/generate-stl/?${params.toString()}`,
-      );
+        `${BASE_URL}/generate-stl/?${params.toString()}`
+      );      
+      
 
       // If the response is not OK or not an STL file
       if (!response.ok) {
