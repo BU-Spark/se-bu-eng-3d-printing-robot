@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 
 // Downloading Files
@@ -151,78 +153,45 @@ export default function NewExpTab() {
 
   const handleTextFieldChange = (key: string, value: string) => {
     setCsvError(null);
-
     const metadata = designMetadata[key];
-
-    // Allow empty input for deletion
+  
+    // Allow empty input for editing
     if (value === "") {
       setDesignState((prev) => ({ ...prev, [key]: value }));
       return;
     }
-
-    // Determine if negative numbers are allowed
+  
+    // Allow numbers and decimals, with optional negative sign
     const allowNegative = (metadata.min ?? 0) < 0;
     const regex = allowNegative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
-
-    // Ensure valid numeric input
-    if (!regex.test(value)) return;
-
-    // Handle cases where user starts with "."
-    if (value === ".") {
-      value = "0.";
-    } else if (value === "-.") {
-      value = "-0.";
-    }
-
-    // Convert to number and enforce min/max **while typing**
-    let numericValue = Number(value);
-    if (numericValue < (metadata.min ?? -Infinity)) {
-      numericValue = metadata.min!;
-    }
-    if (numericValue > (metadata.max ?? Infinity)) {
-      numericValue = metadata.max!;
-    }
-
-    setDesignState((prev) => {
-      const newState = { ...prev, [key]: numericValue };
-      generateSTLThrottled(newState); // Trigger the throttled API call
-      return newState;
-    });
+  
+    if (!regex.test(value)) return; // Ignore invalid input
+  
+    setDesignState((prev) => ({ ...prev, [key]: value }));
   };
-
+  
   const handleTextFieldBlur = (key: string) => {
     setDesignState((prev) => {
       let value = prev[key];
-
-      // Get min value from metadata
-      const metadata = designMetadata[key];
-      const minValue = metadata.min ?? 0;
-
-      // If empty, reset to min value
-      if (value === "") {
-        return { ...prev, [key]: minValue };
+  
+      // Ensure value is a valid number
+      if (typeof value === "string") {
+        if (value === "" || value === "." || value === "-.") {
+          value = designMetadata[key].min ?? 0; 
+        } else {
+          value = Number(value);
+        }
       }
-
-      // If ends with '.', '-.', append '0'
-      if (typeof value === "string" && value.match(/^-?\d+\.$/)) {
-        value += "0";
-      }
-
-      let numericValue = Number(value);
-
-      // Enforce min/max **on blur**
-      if (numericValue < minValue) {
-        numericValue = minValue;
-      }
-      if (numericValue > (metadata.max ?? Infinity)) {
-        numericValue = metadata.max!;
-      }
-
-      const newState = { ...prev, [key]: numericValue };
-      generateSTLThrottled(newState); // Trigger the throttled API call
+  
+      // Enforce min/max constraints
+      value = Math.max(designMetadata[key].min ?? -Infinity, value);
+      value = Math.min(designMetadata[key].max ?? Infinity, value);
+  
+      const newState = { ...prev, [key]: value };
+      generateSTLThrottled(newState); // Trigger STL generation
       return newState;
     });
-  };
+  };  
 
   const handleMaterialChange = (value: string) => {
     setDesignState((prev) => ({ ...prev, material: value }));
