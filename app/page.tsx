@@ -490,7 +490,7 @@ export default function Home() {
               lineHeight: '1.6'
             }}>Design your prototype by adjusting parameters to create a custom 3D model, then submit it to our robot for printing and testing.</p>
             <a 
-              href="/account/newexp" 
+              href="/pages/account/newexp" 
               style={{ 
                 color: 'white',
                 backgroundColor: '#CC0000', 
