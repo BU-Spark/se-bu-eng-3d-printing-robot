@@ -63,28 +63,72 @@ export default function Home() {
       backgroundColor: '#FAFAFA'
     }}>
       {/* Header Section */}
-      <div style={{ 
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        height: '60vh',
+        overflow: 'hidden',
+        borderRadius: '12px',
         marginBottom: '60px',
-        textAlign: 'center'
       }}>
-        <h1 style={{ 
-          color: '#CC0000', 
-          fontSize: '2.5rem',
-          fontWeight: '700',
-          marginBottom: '16px'
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: '120vw',
+          height: '67.5vw', // maintain 16:9
+          transform: 'translate(-50%, -50%)',
+          zIndex: 0,
+          pointerEvents: 'none'
         }}>
-          Welcome
-        </h1>
-        <p style={{
-          fontSize: '1.1rem',
-          color: '#555',
-          maxWidth: '80vw',
-          margin: '0 auto',
-          lineHeight: '1.6'
+          <iframe
+            src="https://www.youtube.com/embed/Mj98vyh0YoU?autoplay=1&mute=1&controls=0&loop=1&playlist=Mj98vyh0YoU&modestbranding=1&showinfo=0"
+            frameBorder="0"
+            allow="autoplay; muted; loop; encrypted-media"
+            allowFullScreen
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none'
+            }}
+          ></iframe>
+        </div>
+
+        {/* Full-height overlay for text content */}
+        <div style={{
+          position: 'relative',
+          zIndex: 1,
+          height: '100%',
+          width: '100%',
+          background: 'rgba(255, 0, 0, 0.2)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center',
+          padding: '0 20px'
         }}>
-          Access cutting-edge autonomous research technology from anywhere in the world. The BEAR Platform connects you directly to Boston University's 
-          revolutionary robotic system that combines 3D printing, automated testing, and Bayesian optimization to discover optimal mechanical designs.
-        </p>
+          <h1 style={{
+            color: '#FFFFFF',
+            fontSize: '2.5rem',
+            fontWeight: '700',
+            marginBottom: '16px',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'
+          }}>
+            Welcome
+          </h1>
+          <p style={{
+            fontSize: '1.1rem',
+            color: '#FFFFFF',
+            maxWidth: '800px',
+            lineHeight: '1.6',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'
+          }}>
+            Access cutting-edge autonomous research technology from anywhere in the world. The BEAR Platform connects you directly to Boston University's 
+            revolutionary robotic system that combines 3D printing, automated testing, and Bayesian optimization to discover optimal mechanical designs.
+          </p>
+        </div>
       </div>
 
       {/* Main Content */}
