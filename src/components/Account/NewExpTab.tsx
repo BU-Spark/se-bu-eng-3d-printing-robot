@@ -77,9 +77,8 @@ export default function NewExpTab() {
           : process.env.NEXT_PUBLIC_BACKEND_URL; // Production backend
 
       const response = await fetch(
-        `${BASE_URL}/generate-stl/?${params.toString()}`
-      );      
-      
+        `${BASE_URL}/generate-stl/?${params.toString()}`,
+      );
 
       // If the response is not OK or not an STL file
       if (!response.ok) {
@@ -154,44 +153,44 @@ export default function NewExpTab() {
   const handleTextFieldChange = (key: string, value: string) => {
     setCsvError(null);
     const metadata = designMetadata[key];
-  
+
     // Allow empty input for editing
     if (value === "") {
       setDesignState((prev) => ({ ...prev, [key]: value }));
       return;
     }
-  
+
     // Allow numbers and decimals, with optional negative sign
     const allowNegative = (metadata.min ?? 0) < 0;
     const regex = allowNegative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
-  
+
     if (!regex.test(value)) return; // Ignore invalid input
-  
+
     setDesignState((prev) => ({ ...prev, [key]: value }));
   };
-  
+
   const handleTextFieldBlur = (key: string) => {
     setDesignState((prev) => {
       let value = prev[key];
-  
+
       // Ensure value is a valid number
       if (typeof value === "string") {
         if (value === "" || value === "." || value === "-.") {
-          value = designMetadata[key].min ?? 0; 
+          value = designMetadata[key].min ?? 0;
         } else {
           value = Number(value);
         }
       }
-  
+
       // Enforce min/max constraints
       value = Math.max(designMetadata[key].min ?? -Infinity, value);
       value = Math.min(designMetadata[key].max ?? Infinity, value);
-  
+
       const newState = { ...prev, [key]: value };
       generateSTLThrottled(newState); // Trigger STL generation
       return newState;
     });
-  };  
+  };
 
   const handleMaterialChange = (value: string) => {
     setDesignState((prev) => ({ ...prev, material: value }));
