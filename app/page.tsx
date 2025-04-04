@@ -265,11 +265,92 @@ export default function Home() {
             }}></span>
           </h2>
 
+          {/* Contact Section */}
+          <div
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              padding: '24px',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+            }}
+          >
+            <h3 style={{
+              margin: '0 0 16px 0',
+              fontSize: '1.2rem',
+              fontWeight: '600'
+            }}>Contact</h3>
+
+            {[{
+              img: 'https://www.bu.edu/eng/files/2021/03/KeithABrown_2019-600x600.jpg',
+              name: 'Keith A. Brown, PhD',
+              title: 'Associate Professor (ME, MSE, Physics) Associate Chair for Graduate Programs (ME)',
+              email: 'brownka@bu.edu'
+            }, {
+              img: 'https://sites.bu.edu/graphics/files/2021/07/sam_headshot-600x600.jpg',
+              name: 'Sam Silverman',
+              title: 'PhD Student in Computer Science',
+              email: 'sssilver@bu.edu'
+            }, {
+              img: 'https://www.bu.edu/cs/files/2017/06/ARROWS__1253__06-21-22-18-Edit.jpg',
+              name: 'Emily Whiting',
+              title: 'Associate Professor and Director of Ph.D. Admissions',
+              email: 'whiting@bu.edu'
+            }].map((person, index) => (
+              <div 
+                key={index}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  marginBottom: index !== 2 ? '16px' : '0'
+                }}
+              >
+                {/* Profile image */}
+                <img 
+                  src={person.img}
+                  alt={person.name}
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    marginRight: '16px'
+                  }}
+                />
+
+                {/* Text info */}
+                <div>
+                  <div style={{
+                    fontSize: '0.95rem',
+                    fontWeight: '600',
+                    marginBottom: '4px'
+                  }}>{person.name}</div>
+                  <div style={{
+                    fontSize: '0.85rem',
+                    color: '#777',
+                    marginBottom: '4px'
+                  }}>{person.title}</div>
+                  <a 
+                    href={`mailto:${person.email}`} 
+                    style={{ 
+                      fontSize: '0.85rem', 
+                      color: '#CC0000', 
+                      textDecoration: 'none' 
+                    }}
+                  >
+                    {person.email}
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Quick Links Section */} 
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
             gap: '16px',
-            marginBottom: '30px'
+            marginBottom: '30px',
+            marginTop: '40px'
           }}>
             {['Account', 'Library', 'Status', 'Leaderboard'].map((item, i) => (
               <a
@@ -342,7 +423,8 @@ export default function Home() {
               </a>
             ))}
           </div>
-
+          
+          {/* New Experiment Section */}
           <div
             style={{
               backgroundColor: 'white',
