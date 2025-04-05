@@ -78,18 +78,25 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
           py: { xs: 1, md: 0 },
         }}
       >
-        <Typography
-          variant="h6"
-          component="div"
+        <Button
+          component={Link}
+          href="/"
           sx={{
             ml: { xs: 0, md: 2 },
             fontFamily: font,
             textAlign: { xs: "center", md: "left" },
             mb: { xs: 0, md: 0 },
+            color: colorScheme.secondary,
+            textTransform: 'none', // Prevents uppercase transformation
+            fontSize: '1.25rem', // Similar to h6 variant
+            '&:hover': {
+              backgroundColor: 'transparent', // Remove hover background
+              textDecoration: 'none', // Remove underline on hover
+            }
           }}
         >
           The Experimental Mechanics Challenge
-        </Typography>
+        </Button>
 
         <Box
           sx={{
@@ -110,52 +117,56 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
               minWidth: { xs: "max-content", md: "auto" }, // Ensure buttons don't shrink
             }}
           >
-            {/* Navigation buttons - Account */}
-            <Button
-              color="inherit"
-              component={Link}
-              href="/pages/account"
-              sx={{
-                ...buttonStyle,
-                "&:hover": buttonHoverStyle,
-                mr: { xs: 1, md: 1 },
-                fontSize: { xs: "0.75rem", md: "0.8rem" }, // Shrink font size on small screens
-              }}
-            >
-              <AccountCircle />
-              Account
-            </Button>
-            {/* Navigation buttons - Library */}
-            <Button
-              color="inherit"
-              component={Link}
-              href="/pages/library"
-              sx={{
-                ...buttonStyle,
-                "&:hover": buttonHoverStyle,
-                mr: { xs: 1, md: 1 },
-                fontSize: { xs: "0.75rem", md: "0.8rem" },
-              }}
-            >
-              <Library />
-              Library
-            </Button>
-            {/* Navigation buttons - BEAR Status */}
-            <Button
-              color="inherit"
-              component={Link}
-              href="/pages/bear-status"
-              sx={{
-                ...buttonStyle,
-                "&:hover": buttonHoverStyle,
-                mr: { xs: 1, md: 1 },
-                fontSize: { xs: "0.75rem", md: "0.8rem" },
-              }}
-            >
-              <QueryStatsIcon />
-              BEAR status
-            </Button>
-            {/* Navigation buttons - Leaderboard */}
+            {/* For Signed In Users */}
+            <SignedIn>
+              {/* Navigation buttons - Account */}
+              <Button
+                color="inherit"
+                component={Link}
+                href="/pages/account"
+                sx={{
+                  ...buttonStyle,
+                  "&:hover": buttonHoverStyle,
+                  mr: { xs: 1, md: 1 },
+                  fontSize: { xs: "0.75rem", md: "0.8rem" }, // Shrink font size on small screens
+                }}
+              >
+                <AccountCircle />
+                Account
+              </Button>
+              {/* Navigation buttons - Library */}
+              <Button
+                color="inherit"
+                component={Link}
+                href="/pages/library"
+                sx={{
+                  ...buttonStyle,
+                  "&:hover": buttonHoverStyle,
+                  mr: { xs: 1, md: 1 },
+                  fontSize: { xs: "0.75rem", md: "0.8rem" },
+                }}
+              >
+                <Library />
+                Library
+              </Button>
+              {/* Navigation buttons - BEAR Status */}
+              <Button
+                color="inherit"
+                component={Link}
+                href="/pages/bear-status"
+                sx={{
+                  ...buttonStyle,
+                  "&:hover": buttonHoverStyle,
+                  mr: { xs: 1, md: 1 },
+                  fontSize: { xs: "0.75rem", md: "0.8rem" },
+                }}
+              >
+                <QueryStatsIcon />
+                BEAR status
+              </Button>
+            </SignedIn>
+            
+            {/* Leaderboard button (always visible) */}
             <Button
               color="inherit"
               component={Link}
