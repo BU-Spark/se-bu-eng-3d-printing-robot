@@ -25,6 +25,7 @@
     "@types/jszip": "^3.4.0",
     "@types/lodash": "^4.17.16",
     "file-saver": "^2.0.5",
+    "framer-motion": "^12.6.3",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
     "mysql2": "^3.13.0",
