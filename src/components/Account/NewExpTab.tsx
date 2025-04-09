@@ -6,6 +6,9 @@ import { useState } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
+// Clerk authentication
+import { useUser } from "@clerk/nextjs";
+
 // For throttling API calls
 import { set, throttle } from "lodash";
 
@@ -264,6 +267,8 @@ export default function NewExpTab() {
       setCsvError("Please upload a valid CSV file.");
     }
   };
+
+  const { isSignedIn } = useUser();
   /**********************************************************************************/
 
   return (
@@ -474,18 +479,20 @@ export default function NewExpTab() {
               </Box>
 
               {/* Submit button */}
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#CC0000",
-                  color: "#FFFFFF",
-                  "&:hover": {
-                    backgroundColor: "#AA0000",
-                  },
-                }}
-              >
-                Submit
-              </Button>
+              {isSignedIn && (
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#CC0000",
+                    color: "#FFFFFF",
+                    "&:hover": {
+                      backgroundColor: "#AA0000",
+                    },
+                  }}
+                >
+                  Submit
+                </Button>
+              )}
             </Box>
           </Box>
         </Grid>
