@@ -12,7 +12,7 @@ export default async function AdminLayout({
   
   // Check if user exists
   if (!user) {
-    redirect('/signin');
+    redirect('/');
   }
   
   // Check if user is an admin
