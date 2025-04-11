@@ -14,10 +14,9 @@ export async function GET(request: Request) {
   const sortBy = searchParams.get("sortBy") || "ratio";
   const sortOrder = searchParams.get("sortOrder")?.toUpperCase() === "ASC" ? "ASC" : "DESC";
   
-  // Filtering 
-  const experimentId = searchParams.get("experimentId");
-  const searchField = searchParams.get("searchField");
-  const searchValue = searchParams.get("searchValue");
+  // Filtering - handle multiple filters
+  const searchFields = searchParams.getAll("searchField");
+  const searchValues = searchParams.getAll("searchValue");
   
   try {
     let whereClause = Prisma.sql`
@@ -26,38 +25,37 @@ export async function GET(request: Request) {
       AND RecordedMass != 0
     `;
     
-    if (experimentId) {
-      whereClause = Prisma.sql`
-        ${whereClause}
-        AND CONVERT(Request_ID, CHAR) LIKE CONCAT(${experimentId}, '%')
-      `;
-    } else if (searchField && searchValue) {
-      const validSearchFields = [
-        'Request_ID', 
-        'Toughness', 
-        'RecordedMass', 
-        'CriticalStress', 
-        'TargetHeight',
-        'ratio'
-      ];
+    // Combine multiple filters with AND conditions
+    const validSearchFields = [
+      'Request_ID', 
+      'Toughness', 
+      'RecordedMass', 
+      'CriticalStress', 
+      'TargetHeight',
+      'ratio'
+    ];
+    
+    for (let i = 0; i < searchFields.length; i++) {
+      const field = searchFields[i];
+      const value = searchValues[i];
       
-      if (validSearchFields.includes(searchField)) {
-        if (searchField === 'ratio') {
-          whereClause = Prisma.sql`
-            ${whereClause}
-            AND CONVERT(Toughness / RecordedMass, CHAR) LIKE CONCAT(${searchValue}, '%')
-          `;
-        } else if (searchField === 'Request_ID') {
-          whereClause = Prisma.sql`
-            ${whereClause}
-            AND CONVERT(${Prisma.raw(searchField)}, CHAR) LIKE CONCAT(${searchValue}, '%')
-          `;
-        } else {
-          whereClause = Prisma.sql`
-            ${whereClause}
-            AND CONVERT(${Prisma.raw(searchField)}, CHAR) LIKE CONCAT(${searchValue}, '%')
-          `;
-        }
+      if (!field || !value || !validSearchFields.includes(field)) continue;
+      
+      if (field === 'ratio') {
+        whereClause = Prisma.sql`
+          ${whereClause}
+          AND CONVERT(Toughness / RecordedMass, CHAR) LIKE CONCAT(${value}, '%')
+        `;
+      } else if (field === 'Request_ID') {
+        whereClause = Prisma.sql`
+          ${whereClause}
+          AND CONVERT(${Prisma.raw(field)}, CHAR) LIKE CONCAT(${value}, '%')
+        `;
+      } else {
+        whereClause = Prisma.sql`
+          ${whereClause}
+          AND CONVERT(${Prisma.raw(field)}, CHAR) LIKE CONCAT(${value}, '%')
+        `;
       }
     }
     
