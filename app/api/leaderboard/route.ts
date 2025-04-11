@@ -1,4 +1,3 @@
-// app/api/leaderboard/route.ts
 import { NextResponse } from "next/server";
 import { PrismaClient, Prisma } from "@prisma/client";
 
@@ -15,11 +14,12 @@ export async function GET(request: Request) {
   const sortBy = searchParams.get("sortBy") || "ratio";
   const sortOrder = searchParams.get("sortOrder")?.toUpperCase() === "ASC" ? "ASC" : "DESC";
   
-  // Filtering
-  const experimentId = searchParams.get("experimentId") || "";
+  // Filtering 
+  const experimentId = searchParams.get("experimentId");
+  const searchField = searchParams.get("searchField");
+  const searchValue = searchParams.get("searchValue");
   
   try {
-    // Build the WHERE clause with parameterized conditions
     let whereClause = Prisma.sql`
       Toughness IS NOT NULL
       AND RecordedMass IS NOT NULL
@@ -27,14 +27,40 @@ export async function GET(request: Request) {
     `;
     
     if (experimentId) {
-      // MySQL-safe parameterized LIKE query for partial matching
       whereClause = Prisma.sql`
         ${whereClause}
-        AND CONVERT(Request_ID, CHAR) LIKE CONCAT('%', ${experimentId}, '%')
+        AND CONVERT(Request_ID, CHAR) LIKE CONCAT(${experimentId}, '%')
       `;
+    } else if (searchField && searchValue) {
+      const validSearchFields = [
+        'Request_ID', 
+        'Toughness', 
+        'RecordedMass', 
+        'CriticalStress', 
+        'TargetHeight',
+        'ratio'
+      ];
+      
+      if (validSearchFields.includes(searchField)) {
+        if (searchField === 'ratio') {
+          whereClause = Prisma.sql`
+            ${whereClause}
+            AND CONVERT(Toughness / RecordedMass, CHAR) LIKE CONCAT(${searchValue}, '%')
+          `;
+        } else if (searchField === 'Request_ID') {
+          whereClause = Prisma.sql`
+            ${whereClause}
+            AND CONVERT(${Prisma.raw(searchField)}, CHAR) LIKE CONCAT(${searchValue}, '%')
+          `;
+        } else {
+          whereClause = Prisma.sql`
+            ${whereClause}
+            AND CONVERT(${Prisma.raw(searchField)}, CHAR) LIKE CONCAT(${searchValue}, '%')
+          `;
+        }
+      }
     }
     
-    // Handle the ORDER BY clause safely
     let orderByClause;
     const validSortColumns = [
       'Request_ID', 

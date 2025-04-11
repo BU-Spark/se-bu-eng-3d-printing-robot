@@ -264,7 +264,7 @@ export default function AccountPage() {
                 }}
               />
               <Tab 
-                label={isMobile ? null : "New Experience"} 
+                label={isMobile ? null : "New Experiment"} 
                 icon={isMobile ? <AddCircleOutlineIcon /> : <AddCircleOutlineIcon sx={{ mr: 1 }} />}
                 iconPosition="start"
                 sx={{

@@ -25,6 +25,23 @@ import SearchIcon from "@mui/icons-material/Search";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
+// Custom debounce hook
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 interface LeaderboardEntry {
   Request_ID: number;
   Toughness: number | null;
@@ -47,11 +64,20 @@ export default function Leaderboard() {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [nextPageToFetch, setNextPageToFetch] = useState(1);
-  const [experimentIdSearch, setExperimentIdSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("ratio");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [showingMore, setShowingMore] = useState(false);
-  const [appliedSearch, setAppliedSearch] = useState("");
+  const [hasMoreData, setHasMoreData] = useState(true);
+  
+  // Debounce the search term to avoid excessive API calls
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  // Get the current search field label for display purposes
+  const getCurrentSearchFieldLabel = () => {
+    const option = sortOptions.find(opt => opt.value === sortBy);
+    return option ? option.label : "Experiment ID";
+  };
 
   // Combined fetchData function
   const fetchData = async (
@@ -73,11 +99,15 @@ export default function Leaderboard() {
         sortOrder: explicitValues?.sortOrder || sortOrder,
       });
 
-      const searchTerm = explicitValues?.search !== undefined 
+      const searchValue = explicitValues?.search !== undefined 
         ? explicitValues.search 
-        : appliedSearch;
-      if (searchTerm) {
-        queryParams.append("experimentId", searchTerm);
+        : debouncedSearchTerm;
+        
+      if (searchValue) {
+        // Use the current sortBy as the search field
+        const searchField = explicitValues?.sortBy || sortBy;
+        queryParams.append("searchField", searchField);
+        queryParams.append("searchValue", searchValue);
       }
 
       const response = await fetch(`/api/leaderboard?${queryParams}`);
@@ -85,6 +115,9 @@ export default function Leaderboard() {
       if (!response.ok) throw new Error("Failed to fetch data");
       
       const newData: LeaderboardEntry[] = await response.json();
+      
+      // Check if we received fewer items than requested, indicating no more data
+      setHasMoreData(newData.length === (resetData ? 20 : 10));
       
       if (resetData) {
         setLeaderboardData(newData);
@@ -104,16 +137,12 @@ export default function Leaderboard() {
   };
 
   // Control handlers with immediate fetch and explicit values
-  const handleSearch = () => {
-    const searchTerm = experimentIdSearch.trim();
-    setAppliedSearch(searchTerm);
-    fetchData(true, { search: searchTerm });
-  };
-
   const handleSortChange = (event: SelectChangeEvent) => {
     const newSortBy = event.target.value;
     setSortBy(newSortBy);
-    fetchData(true, { sortBy: newSortBy });
+    // Clear search when changing sort field to avoid confusion
+    setSearchTerm("");
+    fetchData(true, { sortBy: newSortBy, search: "" });
   };
 
   const toggleSortOrder = () => {
@@ -135,6 +164,11 @@ export default function Leaderboard() {
     setShowingMore(false);
   };
 
+  // Effect to listen for changes in debouncedSearchTerm
+  useEffect(() => {
+    fetchData(true, { search: debouncedSearchTerm });
+  }, [debouncedSearchTerm]);
+
   // Initial load with cleanup
   useEffect(() => {
     let isMounted = true;
@@ -144,7 +178,7 @@ export default function Leaderboard() {
         await fetchData(true);
       }
     };
-
+    
     loadData();
 
     return () => {
@@ -173,11 +207,11 @@ export default function Leaderboard() {
 
       <Box sx={{ mb: 3, display: "flex", flexWrap: "wrap", gap: 2, alignItems: "center" }}>
         <TextField
-          placeholder="Search by Experiment ID"
+          placeholder={`Search by ${getCurrentSearchFieldLabel()} (starts with)`}
           variant="outlined"
           size="small"
-          value={experimentIdSearch}
-          onChange={(e) => setExperimentIdSearch(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ flexGrow: 1, minWidth: "250px" }}
           InputProps={{
             startAdornment: (
@@ -186,21 +220,11 @@ export default function Leaderboard() {
               </InputAdornment>
             ),
           }}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
 
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={handleSearch}
-          disabled={isLoading}
-        >
-          {isLoading ? "Searching..." : "Search ID"}
-        </Button>
-
         <FormControl size="small" sx={{ minWidth: 200 }}>
-          <InputLabel>Sort By</InputLabel>
-          <Select value={sortBy} label="Sort By" onChange={handleSortChange}>
+          <InputLabel>Sort & Search By</InputLabel>
+          <Select value={sortBy} label="Sort & Search By" onChange={handleSortChange}>
             {sortOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -258,30 +282,34 @@ export default function Leaderboard() {
       </TableContainer>
 
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Button
-          variant="outlined"
-          color="primary"
-          sx={{ borderRadius: 2 }}
-          disabled={!showingMore || isLoading}
-          onClick={handleHideExtra}
-        >
-          Hide Extra Entries
-        </Button>
+        {showingMore && (
+          <Button
+            variant="outlined"
+            color="primary"
+            sx={{ borderRadius: 2 }}
+            disabled={isLoading}
+            onClick={handleHideExtra}
+          >
+            Hide Extra Entries
+          </Button>
+        )}
 
         <Typography variant="body2">
           Showing {leaderboardData.length} entries
-          {appliedSearch && ` filtered by ID: ${appliedSearch}`}
+          {debouncedSearchTerm && ` starting with ${getCurrentSearchFieldLabel()}: ${debouncedSearchTerm}`}
         </Typography>
-
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{ borderRadius: 2 }}
-          disabled={isLoading || leaderboardData.length === 0}
-          onClick={handleShowMore}
-        >
-          {isLoading ? "Loading..." : "Show 10 More"}
-        </Button>
+        
+        {hasMoreData && (
+          <Button
+            variant="outlined"
+            color="secondary"
+            sx={{ borderRadius: 2 }}
+            disabled={isLoading || leaderboardData.length === 0}
+            onClick={handleShowMore}
+          >
+            {isLoading ? "Loading..." : "Show 10 More"}
+          </Button>
+        )}
       </Box>
     </Box>
   );
