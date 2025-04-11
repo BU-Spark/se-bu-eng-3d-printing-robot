@@ -87,7 +87,7 @@ export default function AdminDashboard({ user, children }: AdminDashboardProps) 
     { text: "User Management", icon: <PeopleIcon />, path: "/pages/admin/users" },
     { text: "Manage Approvals", icon: <AssignmentTurnedInIcon />, path: "/pages/admin/approvals" },
     { text: "Token Management", icon: <TokenIcon />, path: "/pages/admin/tokens" },
-    { text: "System Logs", icon: <ListAltIcon />, path: "/pages/admin/logs" },
+    { text: "System Logs", icon: <ListAltIcon />, path: "/pages/admin/dblogs" },
   ];
 
   const drawer = (
