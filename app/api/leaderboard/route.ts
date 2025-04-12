@@ -1,4 +1,3 @@
-// app/api/leaderboard/route.ts
 import { NextResponse } from "next/server";
 import { PrismaClient, Prisma } from "@prisma/client";
 
@@ -15,26 +14,51 @@ export async function GET(request: Request) {
   const sortBy = searchParams.get("sortBy") || "ratio";
   const sortOrder = searchParams.get("sortOrder")?.toUpperCase() === "ASC" ? "ASC" : "DESC";
   
-  // Filtering
-  const experimentId = searchParams.get("experimentId") || "";
+  // Filtering - handle multiple filters
+  const searchFields = searchParams.getAll("searchField");
+  const searchValues = searchParams.getAll("searchValue");
   
   try {
-    // Build the WHERE clause with parameterized conditions
     let whereClause = Prisma.sql`
       Toughness IS NOT NULL
       AND RecordedMass IS NOT NULL
       AND RecordedMass != 0
     `;
     
-    if (experimentId) {
-      // MySQL-safe parameterized LIKE query for partial matching
-      whereClause = Prisma.sql`
-        ${whereClause}
-        AND CONVERT(Request_ID, CHAR) LIKE CONCAT('%', ${experimentId}, '%')
-      `;
+    // Combine multiple filters with AND conditions
+    const validSearchFields = [
+      'Request_ID', 
+      'Toughness', 
+      'RecordedMass', 
+      'CriticalStress', 
+      'TargetHeight',
+      'ratio'
+    ];
+    
+    for (let i = 0; i < searchFields.length; i++) {
+      const field = searchFields[i];
+      const value = searchValues[i];
+      
+      if (!field || !value || !validSearchFields.includes(field)) continue;
+      
+      if (field === 'ratio') {
+        whereClause = Prisma.sql`
+          ${whereClause}
+          AND CONVERT(Toughness / RecordedMass, CHAR) LIKE CONCAT(${value}, '%')
+        `;
+      } else if (field === 'Request_ID') {
+        whereClause = Prisma.sql`
+          ${whereClause}
+          AND CONVERT(${Prisma.raw(field)}, CHAR) LIKE CONCAT(${value}, '%')
+        `;
+      } else {
+        whereClause = Prisma.sql`
+          ${whereClause}
+          AND CONVERT(${Prisma.raw(field)}, CHAR) LIKE CONCAT(${value}, '%')
+        `;
+      }
     }
     
-    // Handle the ORDER BY clause safely
     let orderByClause;
     const validSortColumns = [
       'Request_ID', 

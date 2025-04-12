@@ -124,7 +124,7 @@ export default function LibraryPage() {
       <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "100%" }}>
         {/* Header Section */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-          <Typography variant="h5" component="h1" fontWeight="bold" color="primary">
+          <Typography variant="h5" component="h1" fontWeight="bold" color="black">
             Lattice Library
           </Typography>
           
