@@ -1,7 +1,7 @@
 // app/pages/admin/layout.tsx
 import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import AdminDashboard from '@/src/components/Admin/AdminDashboard';
+import AdminNavbar from '@/src/components/Admin/Navigation';
 
 export default async function AdminLayout({
   children,
@@ -9,21 +9,14 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const user = await currentUser();
-  
-  // Check if user exists
-  if (!user) {
-    redirect('/');
-  }
-  
-  // Check if user is an admin
+
+  if (!user) redirect('/');
+
   const adminEmails = ['sulafaj@bu.edu', 'wfugate@bu.edu', 'alanl193@bu.edu', 'kalc@bu.edu'];
-  
   const userEmail = user.emailAddresses[0]?.emailAddress;
-  if (!userEmail || !adminEmails.includes(userEmail)) {
-    redirect('/');
-  }
-  
-  // Create a simplified version of the user with only the properties you need
+
+  if (!userEmail || !adminEmails.includes(userEmail)) redirect('/');
+
   const simplifiedUser = {
     id: user.id,
     firstName: user.firstName,
@@ -31,10 +24,21 @@ export default async function AdminLayout({
     email: userEmail,
     imageUrl: user.imageUrl,
   };
-  
+
   return (
-    <AdminDashboard user={simplifiedUser}>
-      {children}
-    </AdminDashboard>
+    <div style={{ 
+      display: 'flex',
+      minHeight: 'calc(100vh - 64px)', 
+      marginTop: '0',
+    }}>
+      <AdminNavbar user={simplifiedUser} />
+      <main style={{ 
+        flexGrow: 1, 
+        padding: '24px',
+        overflowY: 'auto' 
+      }}>
+        {children}
+      </main>
+    </div>
   );
 }
