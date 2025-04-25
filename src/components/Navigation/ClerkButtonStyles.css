@@ -1,9 +1,9 @@
 .clerk-button {
   font-size: 14px;
   font-weight: bold;
-  background-color: #CC0000;
-  color: #FFFFFF;
-  border: 1px solid #FFFFFF;
+  background-color: #cc0000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 8px;
   padding: 6px 16px;
   cursor: pointer;
@@ -11,5 +11,5 @@
 }
 
 .clerk-button:hover {
-  background-color: #E53935;
+  background-color: #e53935;
 }

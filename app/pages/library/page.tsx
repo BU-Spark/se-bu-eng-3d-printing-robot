@@ -2,12 +2,25 @@
 
 import { useState } from "react";
 import {
-  Box, Typography, TextField,
-  MenuItem, Table, TableBody,
-  TableCell, TableContainer, TableHead,
-  TableRow, Card, CardContent,
-  IconButton, Chip, InputAdornment,
-  alpha, ThemeProvider, createTheme, useTheme
+  Box,
+  Typography,
+  TextField,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Card,
+  CardContent,
+  IconButton,
+  Chip,
+  InputAdornment,
+  alpha,
+  ThemeProvider,
+  createTheme,
+  useTheme,
 } from "@mui/material";
 
 // Icons
@@ -17,31 +30,32 @@ import ClearIcon from "@mui/icons-material/Clear";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-interface CustomTheme extends ReturnType<typeof createTheme> {}
+type CustomTheme = ReturnType<typeof createTheme>;
 
-const createCustomTheme = (baseTheme: CustomTheme): CustomTheme => createTheme({
-  ...baseTheme,
-  palette: {
-    ...baseTheme.palette,
-    primary: {
-      main: '#CC0000',
-      light: '#FF3333',
-      dark: '#990000',
-      contrastText: '#FFFFFF',
+const createCustomTheme = (baseTheme: CustomTheme): CustomTheme =>
+  createTheme({
+    ...baseTheme,
+    palette: {
+      ...baseTheme.palette,
+      primary: {
+        main: "#CC0000",
+        light: "#FF3333",
+        dark: "#990000",
+        contrastText: "#FFFFFF",
+      },
+      secondary: {
+        main: "#333333",
+        light: "#666666",
+        dark: "#000000",
+        contrastText: "#FFFFFF",
+      },
     },
-    secondary: {
-      main: '#333333',
-      light: '#666666',
-      dark: '#000000',
-      contrastText: '#FFFFFF',
-    }
-  },
-});
+  });
 
-export default function LibraryPage() {  
+export default function LibraryPage() {
   const baseTheme = useTheme();
   const theme = createCustomTheme(baseTheme);
-  
+
   // State for filters
   const [showFDFigure, setShowFDFigure] = useState(true);
   const [partImageFilter, setPartImageFilter] = useState("Unit Cell");
@@ -123,43 +137,72 @@ export default function LibraryPage() {
     <ThemeProvider theme={theme}>
       <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "100%" }}>
         {/* Header Section */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-          <Typography variant="h5" component="h1" fontWeight="bold" color="black">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 3,
+          }}
+        >
+          <Typography
+            variant="h5"
+            component="h1"
+            fontWeight="bold"
+            color="black"
+          >
             Lattice Library
           </Typography>
-          
+
           <Box sx={{ display: "flex", gap: 1 }}>
-            <IconButton 
+            <IconButton
               onClick={() => setShowFDFigure(!showFDFigure)}
-              sx={{ 
-                bgcolor: showFDFigure ? alpha(theme.palette.primary.main, 0.1) : 'transparent',
-                '&:hover': { bgcolor: showFDFigure ? alpha(theme.palette.primary.main, 0.2) : alpha(theme.palette.grey[500], 0.1) }
+              sx={{
+                bgcolor: showFDFigure
+                  ? alpha(theme.palette.primary.main, 0.1)
+                  : "transparent",
+                "&:hover": {
+                  bgcolor: showFDFigure
+                    ? alpha(theme.palette.primary.main, 0.2)
+                    : alpha(theme.palette.grey[500], 0.1),
+                },
               }}
               title={showFDFigure ? "Hide F-D Figures" : "Show F-D Figures"}
             >
-              {showFDFigure ? 
-                <VisibilityIcon sx={{ color: theme.palette.primary.main }} /> : 
+              {showFDFigure ? (
+                <VisibilityIcon sx={{ color: theme.palette.primary.main }} />
+              ) : (
                 <VisibilityOffIcon />
-              }
+              )}
             </IconButton>
-            
-            <IconButton 
+
+            <IconButton
               onClick={() => setShowFilters(!showFilters)}
-              sx={{ 
-                bgcolor: showFilters ? alpha(theme.palette.primary.main, 0.1) : 'transparent',
-                '&:hover': { bgcolor: showFilters ? alpha(theme.palette.primary.main, 0.2) : alpha(theme.palette.grey[500], 0.1) }
+              sx={{
+                bgcolor: showFilters
+                  ? alpha(theme.palette.primary.main, 0.1)
+                  : "transparent",
+                "&:hover": {
+                  bgcolor: showFilters
+                    ? alpha(theme.palette.primary.main, 0.2)
+                    : alpha(theme.palette.grey[500], 0.1),
+                },
               }}
             >
-              <FilterListIcon sx={{ color: showFilters ? theme.palette.primary.main : "action" }} />
+              <FilterListIcon
+                sx={{
+                  color: showFilters ? theme.palette.primary.main : "action",
+                }}
+              />
             </IconButton>
-            
+
             {activeFiltersCount > 0 && (
-              <Chip 
-                label={`${activeFiltersCount} filter${activeFiltersCount > 1 ? 's' : ''}`} 
-                size="small" 
-                color="primary" 
+              <Chip
+                label={`${activeFiltersCount} filter${activeFiltersCount > 1 ? "s" : ""}`}
+                size="small"
+                color="primary"
                 onDelete={clearFilters}
-                sx={{ height: '32px' }}
+                sx={{ height: "32px" }}
               />
             )}
           </Box>
@@ -172,13 +215,24 @@ export default function LibraryPage() {
               <Box
                 sx={{
                   display: "grid",
-                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" },
+                  gridTemplateColumns: {
+                    xs: "1fr",
+                    sm: "1fr 1fr",
+                    md: "1fr 1fr 1fr",
+                  },
                   gap: 3,
                 }}
               >
                 {/* Part Image */}
                 <Box>
-                  <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: theme.palette.primary.main }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                    }}
+                  >
                     Part Image
                   </Typography>
                   <TextField
@@ -197,7 +251,14 @@ export default function LibraryPage() {
 
                 {/* WADL ID */}
                 <Box>
-                  <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: theme.palette.primary.main }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                    }}
+                  >
                     WADL ID
                   </Typography>
                   <Box sx={{ display: "flex", gap: 1 }}>
@@ -222,15 +283,15 @@ export default function LibraryPage() {
                       InputProps={{
                         endAdornment: wadlIdValue && (
                           <InputAdornment position="end">
-                            <IconButton 
-                              edge="end" 
+                            <IconButton
+                              edge="end"
                               size="small"
                               onClick={() => setWadlIdValue("")}
                             >
                               <ClearIcon fontSize="small" />
                             </IconButton>
                           </InputAdornment>
-                        )
+                        ),
                       }}
                     />
                   </Box>
@@ -238,7 +299,14 @@ export default function LibraryPage() {
 
                 {/* Unit Cell Type */}
                 <Box>
-                  <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: theme.palette.primary.main }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                    }}
+                  >
                     Unit Cell Type
                   </Typography>
                   <TextField
@@ -257,7 +325,14 @@ export default function LibraryPage() {
 
                 {/* Energy Absorbed */}
                 <Box>
-                  <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: theme.palette.primary.main }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                    }}
+                  >
                     Energy Absorbed (J)
                   </Typography>
                   <Box sx={{ display: "flex", gap: 1 }}>
@@ -284,15 +359,15 @@ export default function LibraryPage() {
                       InputProps={{
                         endAdornment: energyAbsorbedValue && (
                           <InputAdornment position="end">
-                            <IconButton 
-                              edge="end" 
+                            <IconButton
+                              edge="end"
                               size="small"
                               onClick={() => setEnergyAbsorbedValue("")}
                             >
                               <ClearIcon fontSize="small" />
                             </IconButton>
                           </InputAdornment>
-                        )
+                        ),
                       }}
                     />
                   </Box>
@@ -300,7 +375,14 @@ export default function LibraryPage() {
 
                 {/* Energy Absorbed per Unit Mass */}
                 <Box>
-                  <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: theme.palette.primary.main }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                    }}
+                  >
                     Energy Absorbed per Unit Mass (J/g)
                   </Typography>
                   <Box sx={{ display: "flex", gap: 1 }}>
@@ -327,23 +409,30 @@ export default function LibraryPage() {
                       InputProps={{
                         endAdornment: energyPerMassValue && (
                           <InputAdornment position="end">
-                            <IconButton 
-                              edge="end" 
+                            <IconButton
+                              edge="end"
                               size="small"
                               onClick={() => setEnergyPerMassValue("")}
                             >
                               <ClearIcon fontSize="small" />
                             </IconButton>
                           </InputAdornment>
-                        )
+                        ),
                       }}
                     />
                   </Box>
                 </Box>
-                
+
                 {/* Search field (could be functional in a real app) */}
                 <Box>
-                  <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: theme.palette.primary.main }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      mb: 1,
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
+                    }}
+                  >
                     Quick Search
                   </Typography>
                   <TextField
@@ -371,161 +460,163 @@ export default function LibraryPage() {
             <TableContainer sx={{ overflowX: "auto" }}>
               <Table size="small">
                 <TableHead>
-                  <TableRow sx={{ bgcolor: alpha(theme.palette.primary.main, 0.05) }}>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                  <TableRow
+                    sx={{ bgcolor: alpha(theme.palette.primary.main, 0.05) }}
+                  >
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       WADL ID
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       Lattice Image
                     </TableCell>
                     {showFDFigure && (
-                      <TableCell 
-                        align="center" 
-                        sx={{ 
-                          fontWeight: 600, 
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontWeight: 600,
                           fontSize: "0.8rem",
                           py: 1.5,
                           color: theme.palette.primary.main,
-                          borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                          borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                         }}
                       >
                         F-D Figure
                       </TableCell>
                     )}
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       Batch
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       IT ID
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       Unit Cell Type
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       Mass (g)
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       x_bend (mm)
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       x_stretch (mm)
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       x_vert (mm)
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       x_joint (mm)
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       Energy Absorbed (J)
                     </TableCell>
-                    <TableCell 
-                      align="center" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: 600,
                         fontSize: "0.8rem",
                         py: 1.5,
                         color: theme.palette.primary.main,
-                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                        borderBottom: `2px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                       }}
                     >
                       Energy per Mass (J/g)
@@ -534,20 +625,25 @@ export default function LibraryPage() {
                 </TableHead>
                 <TableBody>
                   {experimentData.map((row, index) => (
-                    <TableRow 
+                    <TableRow
                       key={row.id}
-                      sx={{ 
-                        '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.05) },
-                        bgcolor: index % 2 === 0 ? alpha(theme.palette.grey[50], 0.5) : 'transparent',
-                        cursor: 'pointer'
+                      sx={{
+                        "&:hover": {
+                          bgcolor: alpha(theme.palette.primary.main, 0.05),
+                        },
+                        bgcolor:
+                          index % 2 === 0
+                            ? alpha(theme.palette.grey[50], 0.5)
+                            : "transparent",
+                        cursor: "pointer",
                       }}
                     >
-                      <TableCell 
-                        align="center" 
-                        sx={{ 
-                          fontSize: "0.8rem", 
+                      <TableCell
+                        align="center"
+                        sx={{
+                          fontSize: "0.8rem",
                           fontWeight: 500,
-                          color: theme.palette.primary.main
+                          color: theme.palette.primary.main,
                         }}
                       >
                         {row.id}
@@ -570,7 +666,9 @@ export default function LibraryPage() {
                       </TableCell>
                       {showFDFigure && (
                         <TableCell align="center" sx={{ p: 1 }}>
-                          <Box sx={{ display: "flex", justifyContent: "center" }}>
+                          <Box
+                            sx={{ display: "flex", justifyContent: "center" }}
+                          >
                             <Box
                               component="img"
                               src={row.fdFigure}
@@ -593,16 +691,16 @@ export default function LibraryPage() {
                         {row.itId || "-"}
                       </TableCell>
                       <TableCell align="center">
-                        <Chip 
-                          label={row.unitCellType} 
-                          size="small" 
-                          sx={{ 
+                        <Chip
+                          label={row.unitCellType}
+                          size="small"
+                          sx={{
                             fontWeight: 500,
                             fontSize: "0.7rem",
                             bgcolor: alpha(theme.palette.primary.main, 0.1),
                             color: theme.palette.primary.dark,
-                            borderRadius: "4px"
-                          }} 
+                            borderRadius: "4px",
+                          }}
                         />
                       </TableCell>
                       <TableCell align="center" sx={{ fontSize: "0.8rem" }}>
@@ -620,22 +718,22 @@ export default function LibraryPage() {
                       <TableCell align="center" sx={{ fontSize: "0.8rem" }}>
                         {row.xJoint}
                       </TableCell>
-                      <TableCell 
-                        align="center" 
-                        sx={{ 
+                      <TableCell
+                        align="center"
+                        sx={{
                           fontSize: "0.8rem",
-                          fontWeight: 500, 
-                          color: theme.palette.primary.main
+                          fontWeight: 500,
+                          color: theme.palette.primary.main,
                         }}
                       >
                         {row.energyAbsorbed}
                       </TableCell>
-                      <TableCell 
-                        align="center" 
-                        sx={{ 
+                      <TableCell
+                        align="center"
+                        sx={{
                           fontSize: "0.8rem",
                           fontWeight: 500,
-                          color: theme.palette.primary.main
+                          color: theme.palette.primary.main,
                         }}
                       >
                         {row.energyPerMass}
@@ -645,28 +743,31 @@ export default function LibraryPage() {
                 </TableBody>
               </Table>
             </TableContainer>
-            
+
             {/* Simple pagination footer (could be expanded in a real app) */}
-            <Box sx={{ 
-              display: "flex", 
-              justifyContent: "space-between", 
-              alignItems: "center", 
-              p: 2,
-              borderTop: `1px solid ${theme.palette.divider}`
-            }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                p: 2,
+                borderTop: `1px solid ${theme.palette.divider}`,
+              }}
+            >
               <Typography variant="body2" color="text.secondary">
-                Showing {experimentData.length} of {experimentData.length} results
+                Showing {experimentData.length} of {experimentData.length}{" "}
+                results
               </Typography>
-              
+
               <Box sx={{ display: "flex", gap: 1 }}>
-                <Chip 
-                  label="1" 
-                  size="small" 
-                  color="primary" 
-                  sx={{ 
-                    fontWeight: 600, 
-                    cursor: "pointer"
-                  }} 
+                <Chip
+                  label="1"
+                  size="small"
+                  color="primary"
+                  sx={{
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
                 />
               </Box>
             </Box>

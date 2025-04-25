@@ -1,34 +1,41 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { 
-  Box, Typography, Paper, Grid, Avatar, Button, Divider, Tooltip 
-} from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PeopleIcon from '@mui/icons-material/People';
-import ApprovalIcon from '@mui/icons-material/Approval';
-import TokenIcon from '@mui/icons-material/Toll';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useRouter } from "next/navigation";
+import {
+  Box,
+  Typography,
+  Paper,
+  Grid,
+  Avatar,
+  Button,
+  Divider,
+  Tooltip,
+} from "@mui/material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+import ApprovalIcon from "@mui/icons-material/Approval";
+import TokenIcon from "@mui/icons-material/Toll";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
 
   return (
-    <Box sx={{ maxWidth: 1200, mx: 'auto', p: { xs: 2, sm: 3, md: 4 } }}>
+    <Box sx={{ maxWidth: 1200, mx: "auto", p: { xs: 2, sm: 3, md: 4 } }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Typography 
-          variant="h4" 
-          component="h1" 
-          sx={{ 
-            fontWeight: 700, 
-            mb: 1, 
-            background: '#CC0000',
-            backgroundClip: 'text',
-            textFillColor: 'transparent',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{
+            fontWeight: 700,
+            mb: 1,
+            background: "#CC0000",
+            backgroundClip: "text",
+            textFillColor: "transparent",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
           }}
         >
           Admin Dashboard
@@ -43,8 +50,8 @@ export default function AdminDashboardPage() {
         {/* Total Users */}
         <Grid item xs={12} sm={6} md={3}>
           <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ bgcolor: '#CC0000', color: 'white' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar sx={{ bgcolor: "#CC0000", color: "white" }}>
                 <PeopleIcon />
               </Avatar>
               <Box>
@@ -62,8 +69,8 @@ export default function AdminDashboardPage() {
         {/* Pending Approvals */}
         <Grid item xs={12} sm={6} md={3}>
           <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ bgcolor: '#FF9800', color: 'white' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar sx={{ bgcolor: "#FF9800", color: "white" }}>
                 <ApprovalIcon />
               </Avatar>
               <Box>
@@ -81,8 +88,8 @@ export default function AdminDashboardPage() {
         {/* Tokens Distributed */}
         <Grid item xs={12} sm={6} md={3}>
           <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ bgcolor: '#4CAF50', color: 'white' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar sx={{ bgcolor: "#4CAF50", color: "white" }}>
                 <TokenIcon />
               </Avatar>
               <Box>
@@ -100,8 +107,8 @@ export default function AdminDashboardPage() {
         {/* System Logs */}
         <Grid item xs={12} sm={6} md={3}>
           <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ bgcolor: '#607D8B', color: 'white' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar sx={{ bgcolor: "#607D8B", color: "white" }}>
                 <EventNoteIcon />
               </Avatar>
               <Box>
@@ -127,8 +134,8 @@ export default function AdminDashboardPage() {
         {/* User Management */}
         <Grid item xs={12} sm={6}>
           <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ bgcolor:'#CC0000', color:'white' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar sx={{ bgcolor: "#CC0000", color: "white" }}>
                 <PeopleIcon />
               </Avatar>
               <Box flexGrow={1}>
@@ -139,21 +146,21 @@ export default function AdminDashboardPage() {
                   Manage user accounts and permissions.
                 </Typography>
               </Box>
-              <Button 
+              <Button
                 variant="contained"
                 size="small"
                 sx={{
-                  bgcolor:'#CC0000',
-                  textTransform:'none',
-                  '&:hover': { bgcolor:'#b30000' }
+                  bgcolor: "#CC0000",
+                  textTransform: "none",
+                  "&:hover": { bgcolor: "#b30000" },
                 }}
-                onClick={() => router.push('./admin/users')}
+                onClick={() => router.push("./admin/users")}
               >
                 Manage
               </Button>
             </Box>
             <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Tooltip title="View detailed user statistics" arrow>
                 <InfoOutlinedIcon color="action" />
               </Tooltip>
@@ -166,8 +173,8 @@ export default function AdminDashboardPage() {
         {/* Token Distribution */}
         <Grid item xs={12} sm={6}>
           <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ bgcolor:'#4CAF50', color:'white' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar sx={{ bgcolor: "#4CAF50", color: "white" }}>
                 <TokenIcon />
               </Avatar>
               <Box flexGrow={1}>
@@ -178,21 +185,21 @@ export default function AdminDashboardPage() {
                   Manage token distribution to users.
                 </Typography>
               </Box>
-              <Button 
+              <Button
                 variant="contained"
                 size="small"
                 sx={{
-                  bgcolor:'#4CAF50',
-                  textTransform:'none',
-                  '& hover': {bgcolor:'#cc7a00'}
+                  bgcolor: "#4CAF50",
+                  textTransform: "none",
+                  "& hover": { bgcolor: "#cc7a00" },
                 }}
-                onClick={() => router.push('./admin/tokens')}
+                onClick={() => router.push("./admin/tokens")}
               >
                 Distribute
               </Button>
             </Box>
             <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Tooltip title="View token distribution history" arrow>
                 <InfoOutlinedIcon color="action" />
               </Tooltip>
@@ -205,8 +212,8 @@ export default function AdminDashboardPage() {
         {/* Approval Management */}
         <Grid item xs={12} sm={6}>
           <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ bgcolor:'#FF9800', color:'white' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar sx={{ bgcolor: "#FF9800", color: "white" }}>
                 <ApprovalIcon />
               </Avatar>
               <Box flexGrow={1}>
@@ -217,21 +224,21 @@ export default function AdminDashboardPage() {
                   Manage pending approvals.
                 </Typography>
               </Box>
-              <Button 
+              <Button
                 variant="contained"
                 size="small"
                 sx={{
-                  bgcolor:'#FF9800',
-                  textTransform:'none',
-                  '& hover': {bgcolor:'#cc7a00'}
+                  bgcolor: "#FF9800",
+                  textTransform: "none",
+                  "& hover": { bgcolor: "#cc7a00" },
                 }}
-                onClick={() => router.push('./admin/approvals')}
+                onClick={() => router.push("./admin/approvals")}
               >
                 Approve
               </Button>
             </Box>
             <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Tooltip title="View approval history" arrow>
                 <InfoOutlinedIcon color="action" />
               </Tooltip>
@@ -242,10 +249,10 @@ export default function AdminDashboardPage() {
           </Paper>
         </Grid>
         {/* System Logs */}
-        <Grid item xs={12} sm={6}> 
+        <Grid item xs={12} sm={6}>
           <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ bgcolor:'#607D8B', color:'white' }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar sx={{ bgcolor: "#607D8B", color: "white" }}>
                 <EventNoteIcon />
               </Avatar>
               <Box flexGrow={1}>
@@ -256,21 +263,21 @@ export default function AdminDashboardPage() {
                   View system logs and activities.
                 </Typography>
               </Box>
-              <Button 
+              <Button
                 variant="contained"
                 size="small"
                 sx={{
-                  bgcolor:'#607D8B',
-                  textTransform:'none',
-                  '& hover': {bgcolor:'#43a047'}
+                  bgcolor: "#607D8B",
+                  textTransform: "none",
+                  "& hover": { bgcolor: "#43a047" },
                 }}
-                onClick={() => router.push('./admin/syslogs')}
+                onClick={() => router.push("./admin/syslogs")}
               >
                 View Logs
               </Button>
             </Box>
             <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Tooltip title="View detailed system logs" arrow>
                 <InfoOutlinedIcon color="action" />
               </Tooltip>
