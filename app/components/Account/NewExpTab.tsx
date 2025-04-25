@@ -13,10 +13,10 @@ import { useUser } from "@clerk/nextjs";
 import { set, throttle } from "lodash";
 
 // Custom components
-import STLViewer from "@/src/components/Account/STLViewer";
+import STLViewer from "./STLViewer";
 
 // Metadata for design parameters
-import { designMetadata } from "@/src/metadata/design";
+import { designMetadata } from "@/app/metadata/design";
 
 // Material-UI components
 import {

@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { Box } from "@mui/material";
-import NewExpTab from "@/src/components/Account/NewExpTab";
+import NewExpTab from "@/app/components/Account/NewExpTab";
 
 const containerStyle: CSSProperties = {
   display: "flex",
