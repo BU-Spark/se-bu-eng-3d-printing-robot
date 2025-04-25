@@ -1,7 +1,7 @@
+"use client";
+
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { createRouteMatcher } from "@clerk/nextjs/server";
-
-("using client");
 
 const publicRoutes = ["/", "/pages/leaderboard", "/api/leaderboard"];
 const protectedRoutes = ["/pages/admin", "/api/admin"];

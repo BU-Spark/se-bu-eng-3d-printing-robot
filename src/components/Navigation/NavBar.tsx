@@ -54,11 +54,18 @@ const appBarStyles: CSSProperties = {
 
 const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
   const { user } = useUser();
-  
+
   // Check if user is an admin
-  const adminEmails = ['sulafaj@bu.edu', 'wfugate@bu.edu', 'alanl193@bu.edu', 'kalc@bu.edu'];
-  const isAdmin = user && user.primaryEmailAddress?.emailAddress && 
-                  adminEmails.includes(user.primaryEmailAddress.emailAddress);
+  const adminEmails = [
+    "sulafaj@bu.edu",
+    "wfugate@bu.edu",
+    "alanl193@bu.edu",
+    "kalc@bu.edu",
+  ];
+  const isAdmin =
+    user &&
+    user.primaryEmailAddress?.emailAddress &&
+    adminEmails.includes(user.primaryEmailAddress.emailAddress);
 
   // Button styles
   const buttonStyle: CSSProperties = {
@@ -98,12 +105,12 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
             textAlign: { xs: "center", md: "left" },
             mb: { xs: 0, md: 0 },
             color: colorScheme.secondary,
-            textTransform: 'none', // Prevents uppercase transformation
-            fontSize: '1.25rem', // Similar to h6 variant
-            '&:hover': {
-              backgroundColor: 'transparent', // Remove hover background
-              textDecoration: 'none', // Remove underline on hover
-            }
+            textTransform: "none", // Prevents uppercase transformation
+            fontSize: "1.25rem", // Similar to h6 variant
+            "&:hover": {
+              backgroundColor: "transparent", // Remove hover background
+              textDecoration: "none", // Remove underline on hover
+            },
           }}
         >
           The Experimental Mechanics Challenge
@@ -175,7 +182,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                 <QueryStatsIcon />
                 BEAR status
               </Button>
-              
+
               {/* Admin button - Only visible to admins */}
               {isAdmin && (
                 <Button
@@ -187,7 +194,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                     "&:hover": buttonHoverStyle,
                     mr: { xs: 1, md: 1 },
                     fontSize: { xs: "0.75rem", md: "0.8rem" },
-                    backgroundColor: 'rgba(255,255,255,0.15)', 
+                    backgroundColor: "rgba(255,255,255,0.15)",
                   }}
                 >
                   <AdminPanelSettingsIcon />
@@ -195,7 +202,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                 </Button>
               )}
             </SignedIn>
-            
+
             {/* Leaderboard button (always visible) */}
             <Button
               color="inherit"
@@ -255,7 +262,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
               sx={{
                 color: colorScheme.secondary,
                 "&:hover": buttonHoverStyle,
-                display: "flex", 
+                display: "flex",
                 alignItems: "center",
                 fontFamily: font,
               }}
