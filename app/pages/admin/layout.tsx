@@ -1,7 +1,7 @@
 // app/pages/admin/layout.tsx
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import AdminNavbar from "@/src/components/Admin/Navigation";
+import AdminNavbar from "@/app/components/Admin/Navigation";
 
 export default async function AdminLayout({
   children,
