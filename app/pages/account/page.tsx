@@ -23,9 +23,9 @@ import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 // Components
-import InfoTab from "@/src/components/Account/InfoTab";
-import StatusTab from "@/src/components/Account/StatusTab";
-import NewExpTab from "@/src/components/Account/NewExpTab";
+import InfoTab from "@/app/components/Account/InfoTab";
+import StatusTab from "@/app/components/Account/StatusTab";
+import NewExpTab from "@/app/components/Account/NewExpTab";
 
 // TabPanel component
 interface TabPanelProps {

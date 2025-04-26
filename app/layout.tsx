@@ -2,7 +2,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 
 // Components
-import NavBar from "../src/components/Navigation/NavBar";
+import NavBar from "./components/Navigation/NavBar";
 
 export default function RootLayout({
   children,
