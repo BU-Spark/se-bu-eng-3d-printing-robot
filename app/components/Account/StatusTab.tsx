@@ -5,27 +5,15 @@ import { motion } from "framer-motion";
 
 // Material UI components
 import {
-  Box,
-  Typography,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Chip,
-  Card,
-  CardContent,
-  LinearProgress,
-  alpha,
-  Tooltip,
-  IconButton,
-  Badge,
-  Avatar,
+  Box, Typography, Paper,
+  TableContainer, Table, TableHead,
+  TableRow, TableCell, TableBody,
+  Chip, Card, CardContent,
+  LinearProgress, Tooltip, IconButton,
+  Badge, Avatar, alpha
 } from "@mui/material";
 
-// Icons
+// Material UI icons
 import TokenIcon from "@mui/icons-material/Token";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -33,8 +21,11 @@ import PauseIcon from "@mui/icons-material/Pause";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import StarIcon from "@mui/icons-material/Star";
 
-/**********************************************************************************/
-// Mock data for Status tab
+/**
+ * Mock data for the queue section
+ * @constant
+ * @type {Array<Object>}  
+ */
 const currentTokens = 10;
 const queueData = [
   {
@@ -60,7 +51,11 @@ const queueData = [
   },
 ];
 
-// Mock data for previous experiments based on the image
+/**
+ * Mock data for previous experiments
+ * @constant
+ * @type {Array<Object>}
+ */
 const previousExperimentsData = [
   {
     id: 1,
@@ -108,13 +103,21 @@ const previousExperimentsData = [
     date: "2025-03-05",
   },
 ];
-/**********************************************************************************/
 
-// Status chip component
+/**
+ * StatusChip component
+ * 
+ * Displays a colored chip indicating experiment status
+ * 
+ * @param {Object} props - Component props
+ * @param {string} props.status - The status of the experiment
+ * @returns {JSX.Element} - A colored chip with the status label
+ */
 const StatusChip = ({ status }: { status: string }) => {
   let color: "success" | "warning" | "error" | "default" = "default";
   let icon = null;
 
+  // Determine the color and icon based on the status
   switch (status) {
     case "Running":
       color = "success";
@@ -147,6 +150,16 @@ const StatusChip = ({ status }: { status: string }) => {
   );
 };
 
+/**
+ * StatusTab Component
+ * 
+ * Displays:
+ * - Current resource tokens
+ * - Experiment queue with progress
+ * - Table of previous experiments
+ * 
+ * @returns {JSX.Element} - The StatusTab component
+ */
 export default function StatusTab() {
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
@@ -165,7 +178,7 @@ export default function StatusTab() {
         transition={{ duration: 0.4 }}
         style={{ width: "100%", maxWidth: "800px" }}
       >
-        {/* Token and Queue Card */}
+        {/* Resources and Queue Card */}
         <Paper
           elevation={0}
           sx={{
@@ -175,6 +188,7 @@ export default function StatusTab() {
             mb: 4,
           }}
         >
+          {/* Header */}
           <Box
             sx={{
               p: 2.5,

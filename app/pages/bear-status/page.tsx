@@ -1,28 +1,46 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
+// Material UI Components
 import {
-  Box,
-  Typography,
-  Paper,
-  CircularProgress,
-  Fade,
-  Chip,
+  Box, Typography, Paper,
+  CircularProgress, Fade, Chip,
   Container,
 } from "@mui/material";
+
+// Animation Library
 import { motion } from "framer-motion";
 
+/**
+ * BearStatusPage Component
+ * 
+ * Displays the current status and metrics of the BEAR system.
+ * 
+ * Features include:
+ * - Real-time system status visualization
+ * - Queue and performance metrics
+ * - Animated background video
+ * - Responsive layout with smooth transitions
+ * 
+ * @returns {JSX.Element} The BEAR system status dashboard
+ */
 export default function BearStatusPage() {
+  // System running status
   const [isRunning, _setIsRunning] = useState(true);
+  // Number of jobs in queue
   const [jobsInQueue, _setJobsInQueue] = useState(8);
+  // Average completion time in minutes
   const [avgCompletionTime, _setAvgCompletionTime] = useState(75);
+  // Simulate fetching data from an API
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
+  // Video URL for background
   const videoUrl =
     "https://player.vimeo.com/video/881771846?h=62ed69bec91&autoplay=1&loop=1&title=0&background=1&autopause=0";
 
+  // Simulate video loading with timeout
   useEffect(() => {
-    // Simulate video loading
     const timer = setTimeout(() => {
       setIsVideoLoaded(true);
     }, 1000);

@@ -2,50 +2,60 @@
 
 import { useState } from "react";
 
-// Downloading Files
+// File handling libraries
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
-// Clerk authentication
+// Authentication
 import { useUser } from "@clerk/nextjs";
 
-// For throttling API calls
-import { set, throttle } from "lodash";
+// Performance optimization
+import { throttle } from "lodash";
 
 // Custom components
 import STLViewer from "./STLViewer";
 
-// Metadata for design parameters
+// Configuration
 import { designMetadata } from "@/app/metadata/design";
 
 // Material-UI components
 import {
-  TextField,
-  Typography,
-  Grid,
-  Button,
-  Slider,
-  MenuItem,
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+  TextField, Typography, Grid,
+  Button, Slider, MenuItem,
+  Box, Dialog, DialogActions,
+  DialogContent, DialogContentText, DialogTitle,
 } from "@mui/material";
 
 // Material-UI icons
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 
-/**********************************************************************************/
-// Define interface for design state
+/**
+ * Interface for design state
+ * @interface DesignState
+ * @property {string} key - The parameter name
+ * @property {number | string} value - The parameter value (number for sliders, string for dropdowns)
+ */
 interface DesignState {
   [key: string]: number | string;
 }
 
+/**
+ * New Experiment Tab Component
+ * 
+ * Provides an interactive interface for:
+ * - Adjusting design parameters via sliders and dropdowns
+ * - Real-time 3D model visualization
+ * - Importing/exporting design configurations
+ * - Submitting designs to the backend
+ * 
+ * Features:
+ * - Throttled API calls to prevent excessive requests
+ * - CSV import/export functionality
+ * - Authentication-aware UI elements
+ */
 export default function NewExpTab() {
-  // State for design parameters
+  // Initialize design state with default values from metadata
   const [designState, setDesignState] = useState<DesignState>(
     Object.keys(designMetadata).reduce((acc: DesignState, key: string) => {
       const metadata = designMetadata[key];
@@ -54,10 +64,14 @@ export default function NewExpTab() {
     }, {}),
   );
 
-  /**********************************************************************************/
+  // Model and error states
   const [stlUrl, setStlUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  /**
+   * Throttled STL generation function
+   * @param {DesignState} debouncedState - The current design state
+   */
   const generateSTLThrottled = throttle(async (debouncedState: DesignState) => {
     try {
       const { material, ...paramsWithoutMaterial } = debouncedState;
@@ -71,9 +85,7 @@ export default function NewExpTab() {
         ),
       );
 
-      // Toggle Backend URL based on environment
-      // Use local backend during development
-      // Use production backend in production
+      // Dynamic backend URL based on environment
       const BASE_URL =
         process.env.NODE_ENV === "development"
           ? "http://127.0.0.1:8000" // Local backend during development
@@ -101,12 +113,21 @@ export default function NewExpTab() {
     }
   }, 300);
 
+  // Dialog state for download confirmation
   const [openDialog, setOpenDialog] = useState(false);
 
+  /**
+   * Handles the opening of the download confirmation dialog
+   */
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
 
+  /**
+   * Handles the closing of the download confirmation dialog
+   * @param {boolean}
+   * @param {boolean} confirm - Indicates whether the user confirmed the download
+   */
   const handleCloseDialog = (confirm: boolean) => {
     setOpenDialog(false);
     if (confirm) {
@@ -114,6 +135,11 @@ export default function NewExpTab() {
     }
   };
 
+  /**
+   * Downloads design files as a ZIP archive containing:
+   * - STL model file
+   * - CSV with design parameters
+   */
   const handleDownload = async () => {
     if (!stlUrl) {
       alert("No STL file available for download.");
@@ -143,6 +169,11 @@ export default function NewExpTab() {
     }
   };
 
+  /**
+   * Handles slider changes with throttled STL generation
+   * @param {string} key - The parameter name
+   * @param {number} value - New slider value
+   */
   const handleSliderChange = async (key: string, value: number) => {
     setCsvError(null);
 
@@ -153,6 +184,11 @@ export default function NewExpTab() {
     });
   };
 
+  /**
+   * Handles text field input changes with validation
+   * @param {string} key - The parameter name
+   * @param {string} value - New input value
+   */
   const handleTextFieldChange = (key: string, value: string) => {
     setCsvError(null);
     const metadata = designMetadata[key];
@@ -172,11 +208,15 @@ export default function NewExpTab() {
     setDesignState((prev) => ({ ...prev, [key]: value }));
   };
 
+  /**
+   * Handles text field blur with value normalization
+   * @param {string} key - The parameter name
+   */
   const handleTextFieldBlur = (key: string) => {
     setDesignState((prev) => {
       let value = prev[key];
 
-      // Ensure value is a valid number
+      // Normalize value
       if (typeof value === "string") {
         if (value === "" || value === "." || value === "-.") {
           value = designMetadata[key].min ?? 0;
@@ -185,7 +225,7 @@ export default function NewExpTab() {
         }
       }
 
-      // Enforce min/max constraints
+      // Apply min/max constraints
       value = Math.max(designMetadata[key].min ?? -Infinity, value);
       value = Math.min(designMetadata[key].max ?? Infinity, value);
 
@@ -195,11 +235,18 @@ export default function NewExpTab() {
     });
   };
 
+  /**
+   * Handles material selection changes
+   * @param {string} value - The selected material
+   */
   const handleMaterialChange = (value: string) => {
     setDesignState((prev) => ({ ...prev, material: value }));
   };
 
-  // Handle CSV file upload
+  /**
+   * Handles CSV file upload and parameter updates
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The file input event
+   */
   const [csvError, setCsvError] = useState<string | null>(null);
   const handleCSVUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -211,12 +258,13 @@ export default function NewExpTab() {
         const content = event.target?.result as string;
         const rows = content.trim().split("\n");
 
-        // Make sure the CSV has the right number of rows and format
+        // Validate CSV structure
         if (rows.length < 2) {
           setCsvError("CSV is empty or doesn't contain valid data.");
           return;
         }
-
+        
+        // Ensure the first row has 'Parameter,Value' headers
         const headers = rows[0].split(",");
         if (
           headers.length !== 2 ||
@@ -228,7 +276,8 @@ export default function NewExpTab() {
           );
           return;
         }
-
+        
+        // Process the CSV data
         const newState: DesignState = { ...designState };
         let isValid = true;
 
@@ -268,11 +317,12 @@ export default function NewExpTab() {
     }
   };
 
+  // Check if the user is signed in
   const { isSignedIn } = useUser();
-  /**********************************************************************************/
 
   return (
     <Box sx={{ maxWidth: "1000px", width: "100%" }}>
+      {/* Header */}
       <Typography variant="h5" gutterBottom align="center">
         Forward Design Dashboard
       </Typography>
@@ -287,6 +337,7 @@ export default function NewExpTab() {
         performance.
       </Typography>
 
+      {/* Main layout - Two panels: Left for design parameters, Right for 3D model */}
       <Grid container spacing={3}>
         {/* Left panel - Design Parameters */}
         <Grid item xs={12} md={4}>

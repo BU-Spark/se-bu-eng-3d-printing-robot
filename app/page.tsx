@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 
+/**
+ * Article interface representing the structure of an article object.
+ */
 interface Article {
   title: string;
   description: string;
@@ -9,6 +12,9 @@ interface Article {
   url: string;
 }
 
+/**
+ * Articles for the homepage
+ */
 const initialArticleUrls = [
   "https://www.bu.edu/articles/2024/a-robot-on-a-mission/",
   "https://www.bu.edu/eng/2020/07/08/when-the-robot-becomes-the-researcher/",
@@ -16,6 +22,10 @@ const initialArticleUrls = [
   "https://rpaengr.com/an-interns-perspective-boston-universitys-mama-bear/",
 ];
 
+/**
+ * Home page component
+ * @returns The main component for the homepage.
+ */
 export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);

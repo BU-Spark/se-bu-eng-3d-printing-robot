@@ -1,38 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  Typography,
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Alert,
-  Chip,
-  CircularProgress,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Tooltip,
-  styled,
-  alpha,
-} from "@mui/material";
+import { useState, useEffect } from 'react';
 
-// Icons
-import SearchIcon from "@mui/icons-material/Search";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import SortIcon from "@mui/icons-material/Sort";
-import WarningIcon from "@mui/icons-material/Warning";
-import ErrorIcon from "@mui/icons-material/Error";
-import InfoIcon from "@mui/icons-material/Info";
-import PersonIcon from "@mui/icons-material/Person";
+// Material UI components
+import { 
+  Typography, Box, Paper, 
+  Table, TableBody, TableCell, 
+  TableContainer, TableHead, TableRow,
+  Alert, Chip, CircularProgress,
+  TextField, InputAdornment, IconButton,
+  Tooltip, styled, alpha
+} from '@mui/material';
 
-// Custom styled components
+// Material UI icons
+import SearchIcon from '@mui/icons-material/Search';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SortIcon from '@mui/icons-material/Sort';
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from '@mui/icons-material/Info';
+import PersonIcon from '@mui/icons-material/Person';
+
+/**
+ * StyledTableContainer - Custom styled table container
+ */
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: 12,
   boxShadow: "0 0 20px rgba(0, 0, 0, 0.05)",
@@ -40,6 +32,9 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   marginBottom: theme.spacing(4),
 }));
 
+/**
+ * StyledTableHead - Custom styled table head
+ */
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
   "& .MuiTableCell-head": {
     fontWeight: 600,
@@ -48,6 +43,9 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
   },
 }));
 
+/**
+ * LogChip - Custom styled chip for log levels
+ */
 const LogChip = styled(Chip)(({ theme }) => ({
   borderRadius: 16,
   fontWeight: 600,
@@ -56,7 +54,9 @@ const LogChip = styled(Chip)(({ theme }) => ({
   letterSpacing: "0.5px",
 }));
 
-// Sample log data
+/**
+ * Sample log data - Mock data for demonstration purposes
+ */
 const logEntries = [
   {
     id: 1,
@@ -95,17 +95,37 @@ const logEntries = [
   },
 ];
 
+/**
+ * SystemLogsPage Component
+ * 
+ * Displays system activity logs in a searchable and filterable table with custom styling.
+ * Features include:
+ * - Search functionality
+ * - Loading state
+ * - Log level indicators with color coding
+ * - Responsive design
+ * 
+ * @returns {JSX.Element} The rendered component
+ */
 export default function SystemLogsPage() {
   const [loading, setLoading] = useState(true);
   const [logs, setLogs] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Format timestamp
+  /**
+   * Formats a timestamp string into a localized date/time string
+   * @param {string} timestamp 
+   * @returns {string} Formatted date/time string
+   */
   const formatTimestamp = (timestamp: string) => {
     return new Date(timestamp).toLocaleString();
   };
 
-  // Function to get chip color based on log level
+  /**
+   * Determines the chip color based on log level
+   * @param {string} level - Log level (INFO, WARNING, ERROR)
+   * @returns {string} MUI color name for the chip
+   */
   const getChipColor = (level: string) => {
     switch (level) {
       case "INFO":
@@ -119,7 +139,11 @@ export default function SystemLogsPage() {
     }
   };
 
-  // Get icon for log level
+  /**
+   * Gets the appropriate icon for a log level
+   * @param {string} level - Log level (INFO, WARNING, ERROR) 
+   * @returns {JSX.Element} Icon component
+   */
   const getLevelIcon = (level: string) => {
     switch (level) {
       case "INFO":
@@ -133,6 +157,7 @@ export default function SystemLogsPage() {
     }
   };
 
+  // Simulate data loading on component mount
   useEffect(() => {
     // Simulate loading and then set sample logs
     setTimeout(() => {
@@ -141,10 +166,17 @@ export default function SystemLogsPage() {
     }, 1000);
   }, []);
 
+  /**
+   * Handles search input changes
+   * @param {React.ChangeEvent<HTMLInputElement>} event - Input change event 
+   */
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
+  /**
+   * Filter logs based on search term (matches message, user, or level)
+   */
   const filteredLogs = logs.filter(
     (log) =>
       log.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -176,7 +208,7 @@ export default function SystemLogsPage() {
         </Typography>
       </Box>
 
-      {/* Info Alert */}
+      {/* Information Alert */}
       <Alert
         severity="info"
         icon={<InfoOutlinedIcon sx={{ color: "#CC0000" }} />}
@@ -206,6 +238,7 @@ export default function SystemLogsPage() {
           gap: 2,
         }}
       >
+        {/* Search Input */}
         <TextField
           placeholder="Search logs..."
           variant="outlined"
@@ -239,6 +272,7 @@ export default function SystemLogsPage() {
           }}
         />
 
+        {/* Filter and Sort Buttons */}
         <Box sx={{ display: "flex", gap: 1 }}>
           <Tooltip title="Filter">
             <IconButton
@@ -279,6 +313,7 @@ export default function SystemLogsPage() {
             </TableRow>
           </StyledTableHead>
           <TableBody>
+            {/* Loading State */}
             {loading ? (
               <TableRow>
                 <TableCell colSpan={4} align="center" sx={{ py: 4 }}>
@@ -292,6 +327,7 @@ export default function SystemLogsPage() {
                 </TableCell>
               </TableRow>
             ) : filteredLogs.length === 0 ? (
+              /* Empty State */
               <TableRow>
                 <TableCell colSpan={4} align="center">
                   <Box
@@ -313,6 +349,7 @@ export default function SystemLogsPage() {
                 </TableCell>
               </TableRow>
             ) : (
+              /* Log Entries */
               filteredLogs.map((log) => (
                 <TableRow
                   key={log.id}
@@ -323,11 +360,14 @@ export default function SystemLogsPage() {
                     transition: "background-color 0.2s",
                   }}
                 >
+                  {/* Timestamp Cell */}
                   <TableCell>
                     <Typography variant="body2" sx={{ fontWeight: 500 }}>
                       {formatTimestamp(log.timestamp)}
                     </Typography>
                   </TableCell>
+
+                  {/* Log Level Cell */}
                   <TableCell>
                     <LogChip
                       label={log.level}
@@ -337,9 +377,12 @@ export default function SystemLogsPage() {
                       sx={{ minWidth: 80 }}
                     />
                   </TableCell>
+
+                  {/* Message Cell */}
                   <TableCell>
                     <Typography variant="body2">{log.message}</Typography>
                   </TableCell>
+                  {/* User Cell */}
                   <TableCell>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <PersonIcon
@@ -357,7 +400,7 @@ export default function SystemLogsPage() {
         </Table>
       </StyledTableContainer>
 
-      {/* Footer */}
+      {/* Footer with last updated timestamp */}
       <Box sx={{ mt: 2, textAlign: "center" }}>
         <Typography variant="caption" color="text.secondary">
           Last updated: {new Date().toLocaleString()}

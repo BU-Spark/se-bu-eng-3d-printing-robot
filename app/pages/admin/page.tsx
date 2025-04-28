@@ -1,23 +1,37 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+
+// Material UI components
 import {
-  Box,
-  Typography,
-  Paper,
-  Grid,
-  Avatar,
-  Button,
-  Divider,
-  Tooltip,
+  Box, Typography, Paper,
+  Grid, Avatar, Button,
+  Divider, Tooltip,
 } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+
+// Material UI icons
 import PeopleIcon from "@mui/icons-material/People";
 import ApprovalIcon from "@mui/icons-material/Approval";
 import TokenIcon from "@mui/icons-material/Toll";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
+/**
+ * AdminDashboardPage Component
+ * 
+ * The main dashboard for administrators providing:
+ * - System metrics overview
+ * - Quick access to key management functions
+ * - Visual indicators of system status
+ * 
+ * Features:
+ * - Responsive grid layout
+ * - Color-coded metric cards
+ * - Quick action buttons for common tasks
+ * - Tooltips for additional information
+ * 
+ * @returns {JSX.Element} The admin dashboard interface
+ */
 export default function AdminDashboardPage() {
   const router = useRouter();
 

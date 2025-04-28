@@ -1,34 +1,21 @@
 "use client";
+
 import { useState, useEffect } from "react";
+
+// Material UI Components
 import {
-  Box,
-  Typography,
-  TextField,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Button,
-  InputAdornment,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  SelectChangeEvent,
-  IconButton,
-  Tooltip,
-  Chip,
-  CircularProgress,
-  useTheme,
-  useMediaQuery,
-  Card,
-  Divider,
-  createTheme,
-  ThemeProvider,
+  Box, Typography, TextField,
+  Paper, Table, TableBody,
+  TableCell, TableContainer, TableHead,
+  TableRow, Button, InputAdornment,
+  FormControl, Select, MenuItem,
+  InputLabel, SelectChangeEvent, IconButton,
+  Tooltip, Chip, CircularProgress,
+  useTheme, useMediaQuery, Card,
+  Divider, createTheme, ThemeProvider,
 } from "@mui/material";
+
+// Material UI Icons
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -36,6 +23,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
 
+// Custom styles for the theme
 const theme = createTheme({
   palette: {
     primary: {
@@ -48,7 +36,12 @@ const theme = createTheme({
   },
 });
 
-// Custom debounce hook
+/**
+ * Custom debounce hook to delay execution of value changes
+ * @param value - The value to debounce
+ * @param delay - The delay in milliseconds
+ * @returns The debounced value
+ */
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
@@ -65,6 +58,9 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
+/**
+ * Interface for leaderboard entry data structure
+ */
 interface LeaderboardEntry {
   Request_ID: number;
   Toughness: number | null;
@@ -74,11 +70,17 @@ interface LeaderboardEntry {
   ratio: number | null;
 }
 
+/**
+ * Interface for filter objects
+ */
 interface Filter {
   field: string;
   value: string;
 }
 
+/**
+ * Available sorting options for the leaderboard
+ */
 const sortOptions = [
   { value: "ratio", label: "Toughness/Mass" },
   { value: "Toughness", label: "Toughness" },
@@ -88,19 +90,32 @@ const sortOptions = [
   { value: "Request_ID", label: "Experiment ID" },
 ];
 
+/**
+ * LeaderboardContent Component
+ * 
+ * Main component that displays and manages the leaderboard data with:
+ * - Sorting and filtering capabilities
+ * - Pagination
+ */
 function LeaderboardContent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  // Managing state for leaderboard data and UI controls
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
     [],
   );
+  // Managing loading state
   const [isLoading, setIsLoading] = useState(false);
+  // Managing pagination and search state
   const [nextPageToFetch, setNextPageToFetch] = useState(1);
+  // Managing search term and sorting state
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("ratio");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  // Managing showing more data state
   const [showingMore, setShowingMore] = useState(false);
+  // Managing filter state
   const [hasMoreData, setHasMoreData] = useState(true);
   const [activeFilters, setActiveFilters] = useState<Filter[]>([]);
   const [currentFilterField, setCurrentFilterField] = useState("ratio");
@@ -108,13 +123,20 @@ function LeaderboardContent() {
   // Debounce the search term to avoid excessive API calls
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
-  // Get the current search field label for display purposes
+  /**
+   * Gets the display label for the current filter field
+   * @returns {string} - The label of the current filter field
+   */
   const getCurrentSearchFieldLabel = () => {
     const option = sortOptions.find((opt) => opt.value === currentFilterField);
     return option ? option.label : "Experiment ID";
   };
 
-  // Combined fetchData function with filter support
+  /**
+   * Fetches leaderboard data from the API
+   * @param {boolean} resetData - Whether to reset the data or not
+   * @param {object} explicitValues - Optional values to override default fetch parameters
+   */
   const fetchData = async (
     resetData: boolean = false,
     explicitValues?: {
@@ -128,6 +150,7 @@ function LeaderboardContent() {
     try {
       const pageToFetch = resetData ? 1 : nextPageToFetch;
 
+      // Build query parameters for the API request
       const queryParams = new URLSearchParams({
         page: pageToFetch.toString(),
         pageSize: resetData ? "20" : "10",
@@ -170,6 +193,7 @@ function LeaderboardContent() {
         setLeaderboardData(newData);
         setNextPageToFetch(3);
       } else {
+        // Merge new data with existing data
         setLeaderboardData((prev) => {
           const existingIds = new Set(prev.map((entry) => entry.Request_ID));
           return [
@@ -186,6 +210,9 @@ function LeaderboardContent() {
     }
   };
 
+  /**
+   * Adds a new filter from the current search term and field
+   */
   const addFilter = () => {
     if (!searchTerm.trim()) return;
 
@@ -194,6 +221,7 @@ function LeaderboardContent() {
       value: searchTerm.trim(),
     };
 
+    // Check if the filter already exists
     const filterExists = activeFilters.some(
       (f) => f.field === newFilter.field && f.value === newFilter.value,
     );
@@ -206,6 +234,10 @@ function LeaderboardContent() {
     }
   };
 
+  /**
+   * Removes a specific filter
+   * @param {Filter} filterToRemove - The filter to remove
+   */
   const removeFilter = (filterToRemove: Filter) => {
     const updatedFilters = activeFilters.filter(
       (f) =>
@@ -215,13 +247,19 @@ function LeaderboardContent() {
     fetchData(true, { filters: updatedFilters });
   };
 
+  /**
+   * Clears all active filters and resets the search term
+   */
   const clearAllFilters = () => {
     setActiveFilters([]);
     setSearchTerm("");
     fetchData(true, { filters: [] });
   };
 
-  // Control handlers
+  /**
+   * Handles changes in the sort order
+   * @param {SelectChangeEvent} event - The event triggered by the sort order change
+   */
   const handleSortChange = (event: SelectChangeEvent) => {
     const newSortBy = event.target.value;
     setSortBy(newSortBy);
@@ -230,6 +268,9 @@ function LeaderboardContent() {
     fetchData(true, { sortBy: newSortBy, search: "" });
   };
 
+  /**
+   * Toggles the sort order between ascending and descending
+   */
   const toggleSortOrder = () => {
     setSortOrder((prev) => {
       const newOrder = prev === "asc" ? "desc" : "asc";
@@ -238,21 +279,30 @@ function LeaderboardContent() {
     });
   };
 
+  /**
+   * Handles showing more data
+   */
   const handleShowMore = () => {
     fetchData(false);
     setShowingMore(true);
   };
 
+  /**
+   * Handles hiding extra data
+   */
   const handleHideExtra = () => {
     fetchData(true);
     setShowingMore(false);
   };
 
+  /**
+   * Handles refreshing the data
+   */
   const handleRefresh = () => {
     fetchData(true);
   };
 
-  // Effect to listen for Enter key to add filter
+  // Add filter on Enter key press
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter" && searchTerm.trim()) {
@@ -281,6 +331,11 @@ function LeaderboardContent() {
     };
   }, []);
 
+  /**
+   * Formats a numeric value for display
+   * @param {any} value - The value to format
+   * @returns {string} - The formatted value
+   */
   const formatValue = (value: any): string => {
     if (value === null || value === undefined || isNaN(Number(value))) {
       return "-";

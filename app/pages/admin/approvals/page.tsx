@@ -1,35 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Typography,
-  Box,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Grid,
-  Divider,
-  Alert,
-  Tabs,
-  Tab,
-  Chip,
-  Paper,
-  Avatar,
-  Stack,
-  styled,
-  Snackbar,
-} from "@mui/material";
+import { useState } from 'react';
 
-// Icons
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+// Material UI components
+import { 
+  Typography, Box, Card, 
+  CardContent, CardActions, Button,
+  Grid, Divider, Alert,
+  Tabs, Tab, Chip,
+  Paper, Avatar, Stack,
+  styled, Snackbar
+} from '@mui/material';
 
-// Custom styled components
+// Material UI icons
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+
+/**
+ * StyledTabs - Custom styled tabs component
+ */
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
   "& .MuiTabs-indicator": {
@@ -39,6 +32,9 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   },
 }));
 
+/**
+ * StyledTab - Custom styled tab component
+ */
 const StyledTab = styled(Tab)(({ theme }) => ({
   textTransform: "none",
   fontSize: "0.95rem",
@@ -50,22 +46,41 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   },
 }));
 
+/**
+ * StatusChip - Custom styled chip component for status indicators
+ */
 const StatusChip = styled(Chip)(({ theme }) => ({
   borderRadius: 16,
   fontWeight: 500,
   fontSize: "0.75rem",
 }));
 
+/**
+ * ManageApprovalsPage Component
+ * 
+ * An administrative interface for managing user submission approvals with:
+ * - Three tabbed sections (Pending, Approved, Rejected)
+ * - Action buttons for each submission (Approve/Reject/Revoke/Reconsider)
+ * - Visual status indicators
+ * - Notification system for feedback
+ * - Responsive card layout
+ * 
+ * @returns {JSX.Element} The rendered component
+ */
 export default function ManageApprovalsPage() {
+  // State for active tab
   const [tabValue, setTabValue] = useState(0);
-  const [notification, setNotification] = useState({
-    open: false,
-    message: "",
-    type: "",
+
+  // State for notifications
+  const [notification, setNotification] = useState({ 
+    open: false, 
+    message: '', 
+    type: '' 
   });
 
-  // State for all submissions
+  // State for each submission category
   const [pendingSubmissions, setPendingSubmissions] = useState([
+    // Example pending submissions
     {
       id: "12345",
       submitter: "John Doe",
@@ -99,6 +114,7 @@ export default function ManageApprovalsPage() {
   ]);
 
   const [approvedSubmissions, setApprovedSubmissions] = useState([
+    // Example approved submissions
     {
       id: "12340",
       submitter: "Emily Chen",
@@ -122,6 +138,18 @@ export default function ManageApprovalsPage() {
   ]);
 
   const [rejectedSubmissions, setRejectedSubmissions] = useState([
+    // Example rejected submissions
+    {
+      id: '12342',
+      submitter: 'Michael Brown',
+      avatar: 'MB',
+      date: 'April 3, 2025',
+      rejectedDate: 'April 5, 2025',
+      reason: 'Incomplete submission',
+      description: 'description of the rejected submission.',
+      timeAgo: '7 days ago',
+      rejectedTimeAgo: '5 days ago'
+    },
     {
       id: "12338",
       submitter: "Robert Taylor",
@@ -135,11 +163,20 @@ export default function ManageApprovalsPage() {
     },
   ]);
 
+  /**
+   * Handle tab change event
+   * @param {React.SyntheticEvent} event event object from the tab change
+   * @param {number} newValue index of the newly selected tab
+   * @returns {void}
+   */
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
-  // Helper function to get today's date in string format
+  /**
+   * Returns today's date as a formatted string for use in submission records
+   * @returns {string} formatted date string
+   */
   const getTodayDate = () => {
     const today = new Date();
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -149,7 +186,12 @@ export default function ManageApprovalsPage() {
     );
   };
 
-  // Handle approval action
+  /**
+   * Moves a submission from the pending list to the approved list, adds approval 
+   * metadata, displays a success notification, and switches to the approved tab
+   * @param {any} submission the submission object to approve
+   * @returns {void}
+   */
   const handleApprove = (submission: any) => {
     // Remove from pending
     const updatedPending = pendingSubmissions.filter(
@@ -176,7 +218,12 @@ export default function ManageApprovalsPage() {
     setTimeout(() => setTabValue(1), 500);
   };
 
-  // Handle reject action
+  /**
+   * Moves a submission from the pending list to the rejected list, adds rejection 
+   * metadata, displays an error notification, and switches to the rejected tab
+   * @param {any} submission the submission object to reject
+   * @returns {void}
+   */
   const handleReject = (submission: any) => {
     // Remove from pending
     const updatedPending = pendingSubmissions.filter(
@@ -204,7 +251,12 @@ export default function ManageApprovalsPage() {
     setTimeout(() => setTabValue(2), 500);
   };
 
-  // Handle revoke action (move from approved to rejected)
+  /**
+   * Moves a submission from the approved list to the rejected list, adds revocation
+   * metadata, displays a warning notification, and switches to the rejected tab
+   * @param {any} submission the submission object to revoke
+   * @returns {void}
+   */
   const handleRevoke = (submission: any) => {
     // Remove from approved
     const updatedApproved = approvedSubmissions.filter(
@@ -232,7 +284,12 @@ export default function ManageApprovalsPage() {
     setTimeout(() => setTabValue(2), 500);
   };
 
-  // Handle reconsider action (move from rejected to pending)
+  /**
+   * Moves a submission from the rejected list back to the pending list, removes rejection
+   * metadata, displays an info notification, and switches to the pending tab
+   * @param {any} submission the submission object to reconsider
+   * @returns {void}
+   */
   const handleReconsider = (submission: any) => {
     // Remove from rejected
     const updatedRejected = rejectedSubmissions.filter(
@@ -256,7 +313,10 @@ export default function ManageApprovalsPage() {
     setTimeout(() => setTabValue(0), 500);
   };
 
-  // Get current submissions based on active tab
+  /**
+   * Returns the current list of submissions for the selected tab
+   * @returns {Array<any>} the current list of submissions
+   */
   const getCurrentSubmissions = () => {
     switch (tabValue) {
       case 1:
@@ -268,6 +328,10 @@ export default function ManageApprovalsPage() {
     }
   };
 
+  /**
+   * Returns a status icon for the empty state of each tab
+   * @returns {JSX.Element} the status icon component
+   */
   const getStatusIcon = () => {
     switch (tabValue) {
       case 1:
@@ -285,6 +349,11 @@ export default function ManageApprovalsPage() {
     }
   };
 
+  /**
+   * Returns the label for a given tab index
+   * @param {number} index the index of the tab
+   * @returns {string} the label for the tab
+   */
   const getTabLabel = (index: number) => {
     switch (index) {
       case 0:
@@ -297,11 +366,12 @@ export default function ManageApprovalsPage() {
         return "";
     }
   };
-
+  
   const handleCloseNotification = () => {
     setNotification({ ...notification, open: false });
   };
 
+  // Get the currently displayed submissions based on tab selection
   const currentSubmissions = getCurrentSubmissions();
 
   return (
@@ -329,11 +399,11 @@ export default function ManageApprovalsPage() {
       </Box>
 
       {/* Info Alert */}
-      <Alert
-        severity="info"
-        icon={<InfoOutlinedIcon sx={{ color: "#CC0000" }} />}
-        sx={{
-          mb: 4,
+      <Alert 
+        severity="info" 
+        icon={<InfoOutlinedIcon sx={{ color: '#CC0000' }} />} 
+        sx={{ 
+          mb: 4, 
           borderRadius: 2,
           boxShadow: "0 2px 10px rgba(0, 0, 0, 0.05)",
           "& .MuiAlert-message": { py: 1 },
@@ -350,6 +420,7 @@ export default function ManageApprovalsPage() {
 
       {/* Tabs */}
       <Box sx={{ mb: 4 }}>
+        { /* Pending Tab */}
         <StyledTabs
           value={tabValue}
           onChange={handleTabChange}
@@ -386,6 +457,7 @@ export default function ManageApprovalsPage() {
               </Box>
             }
           />
+          { /* Approved Tab */}
           <StyledTab
             label={
               <Box
@@ -415,6 +487,7 @@ export default function ManageApprovalsPage() {
               </Box>
             }
           />
+          { /* Rejected Tab */}
           <StyledTab
             label={
               <Box
@@ -443,7 +516,7 @@ export default function ManageApprovalsPage() {
           />
         </StyledTabs>
       </Box>
-
+      
       {/* Content */}
       {currentSubmissions.length > 0 ? (
         <Grid container spacing={3}>
@@ -501,6 +574,7 @@ export default function ManageApprovalsPage() {
                         </Typography>
                       </Box>
                     </Box>
+                    {/* Status chip for approved/rejected */}
                     {tabValue === 1 && (
                       <StatusChip
                         label="Approved"
@@ -518,12 +592,8 @@ export default function ManageApprovalsPage() {
                       />
                     )}
                   </Box>
-
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    sx={{ mb: 2, fontWeight: 600 }}
-                  >
+                  
+                  <Typography variant="h6" component="h2" sx={{ mb: 2, fontWeight: 600 }}>
                     Submission #{submission.id}
                   </Typography>
 
@@ -537,52 +607,37 @@ export default function ManageApprovalsPage() {
                         Submitted: {submission.date}
                       </Typography>
                     </Box>
-
+                    
                     {/* Conditional extra fields */}
-                    {"approvedDate" in submission &&
-                      submission.approvedDate && (
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <CheckCircleOutlineIcon
-                            fontSize="small"
-                            sx={{ color: "success.main", mr: 1, fontSize: 16 }}
-                          />
-                          <Typography variant="body2" color="success.main">
-                            Approved: {submission.approvedDate} (
-                            {submission.approvedTimeAgo})
-                          </Typography>
-                        </Box>
-                      )}
-
-                    {"rejectedDate" in submission &&
-                      submission.rejectedDate && (
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <CancelOutlinedIcon
-                            fontSize="small"
-                            sx={{ color: "error.main", mr: 1, fontSize: 16 }}
-                          />
-                          <Typography variant="body2" color="error.main">
-                            Rejected: {submission.rejectedDate} (
-                            {submission.rejectedTimeAgo})
-                          </Typography>
-                        </Box>
-                      )}
-
-                    {"reason" in submission && submission.reason && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          mt: 0.5,
-                        }}
-                      >
-                        <InfoOutlinedIcon
-                          fontSize="small"
-                          sx={{
-                            color: "warning.main",
-                            mr: 1,
-                            fontSize: 16,
-                            mt: 0.3,
-                          }}
+                    {'approvedDate' in submission && submission.approvedDate && (
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <CheckCircleOutlineIcon 
+                          fontSize="small" 
+                          sx={{ color: 'success.main', mr: 1, fontSize: 16 }} 
+                        />
+                        <Typography variant="body2" color="success.main">
+                          Approved: {submission.approvedDate} ({submission.approvedTimeAgo})
+                        </Typography>
+                      </Box>
+                    )}
+                    
+                    {'rejectedDate' in submission && submission.rejectedDate && (
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <CancelOutlinedIcon 
+                          fontSize="small" 
+                          sx={{ color: 'error.main', mr: 1, fontSize: 16 }} 
+                        />
+                        <Typography variant="body2" color="error.main">
+                          Rejected: {submission.rejectedDate} ({submission.rejectedTimeAgo})
+                        </Typography>
+                      </Box>
+                    )}
+                    
+                    {'reason' in submission && submission.reason && (
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', mt: 0.5 }}>
+                        <InfoOutlinedIcon 
+                          fontSize="small" 
+                          sx={{ color: 'warning.main', mr: 1, fontSize: 16, mt: 0.3 }} 
                         />
                         <Typography variant="body2" color="text.primary">
                           <Box
@@ -608,10 +663,10 @@ export default function ManageApprovalsPage() {
                     {submission.description}
                   </Typography>
                 </CardContent>
-
-                <CardActions
-                  sx={{
-                    p: 2,
+                
+                <CardActions 
+                  sx={{ 
+                    p: 2, 
                     pt: 0,
                     pb: 2.5,
                     display: "flex",
@@ -632,7 +687,7 @@ export default function ManageApprovalsPage() {
                   >
                     View
                   </Button>
-
+                  
                   {tabValue === 0 && (
                     <>
                       <Button
@@ -667,7 +722,7 @@ export default function ManageApprovalsPage() {
                       </Button>
                     </>
                   )}
-
+                  
                   {tabValue === 1 && (
                     <Button
                       size="small"
@@ -685,7 +740,7 @@ export default function ManageApprovalsPage() {
                       Revoke Access
                     </Button>
                   )}
-
+                  
                   {tabValue === 2 && (
                     <Button
                       size="small"
@@ -709,7 +764,7 @@ export default function ManageApprovalsPage() {
           ))}
         </Grid>
       ) : (
-        <Paper
+        <Paper 
           elevation={0}
           sx={{
             py: 8,
@@ -745,7 +800,7 @@ export default function ManageApprovalsPage() {
         </Paper>
       )}
 
-      {/* Notification */}
+      {/* Notification for action feedback */}
       <Snackbar
         open={notification.open}
         autoHideDuration={4000}

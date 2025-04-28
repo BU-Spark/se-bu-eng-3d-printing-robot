@@ -1,37 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
+// Material UI Components
 import {
-  Typography,
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Button,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Alert,
-  Snackbar,
-  CircularProgress,
-  Avatar,
-  Tooltip,
-  Divider,
-  Chip,
-  styled,
-  alpha,
+  Typography, Box, Paper,
+  Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow,
+  Button, TextField, InputAdornment,
+  IconButton, Dialog, DialogActions,
+  DialogContent, DialogContentText, DialogTitle,
+  Alert, Snackbar, CircularProgress,
+  Avatar, Tooltip, Divider,
+  Chip, styled, alpha,
 } from "@mui/material";
 
-// Icons
+// Material UI Icons
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -42,7 +26,9 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import SortIcon from "@mui/icons-material/Sort";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-// Custom styled components
+/**
+ * StyledTableContainer - Custom styled table container
+ */
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: 12,
   boxShadow: "0 0 20px rgba(0, 0, 0, 0.05)",
@@ -50,6 +36,9 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   marginBottom: theme.spacing(4),
 }));
 
+/**
+ * StyledTableHead - Custom styled table head
+ */
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
   "& .MuiTableCell-head": {
     fontWeight: 600,
@@ -58,12 +47,18 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
   },
 }));
 
+/**
+ * TokenBadge - Custom styled chip for displaying token count
+ */
 const TokenBadge = styled(Chip)(({ theme }) => ({
   borderRadius: 16,
   fontWeight: 600,
   padding: "0 8px",
 }));
 
+/**
+ * ActionButton - Custom styled icon button for actions
+ */
 const ActionButton = styled(IconButton)(({ theme }) => ({
   margin: theme.spacing(0, 0.5),
   transition: "transform 0.2s",
@@ -72,34 +67,41 @@ const ActionButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
+/**
+ * AvatarColorProps - Interface for avatar color props
+ */
 interface AvatarColorProps {
   id: string;
 }
 
+/**
+ * Generates a consistent color for user avatars based on their ID
+ * @param {string} id - User ID
+ * @returns {string} HEX color code
+ */
 const getAvatarColor = (id: AvatarColorProps["id"]): string => {
   const colors: string[] = [
-    "#1a237e",
-    "#311b92",
-    "#4a148c",
-    "#880e4f",
-    "#b71c1c",
-    "#e65100",
-    "#ff6f00",
-    "#827717",
-    "#33691e",
-    "#1b5e20",
-    "#004d40",
-    "#006064",
+    "#1a237e", "#311b92", "#4a148c",
+    "#880e4f", "#b71c1c", "#e65100",
+    "#ff6f00", "#827717", "#33691e",
+    "#1b5e20", "#004d40", "#006064"
   ];
 
-  // Simple hash function
+  // Simple hash function to map ID to color index
   const hash: number = id
     .split("")
     .reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
   return colors[hash % colors.length];
 };
 
-// Sample user data with tokens - this would be replaced with real data
+/**
+ * Sample user data with tokens - would be replaced with real API data
+ * Each user has:
+ * - Unique ID
+ * - First and last name
+ * - Email
+ * - Token balance
+ */
 const sampleUsers = [
   {
     id: "user_1",
@@ -146,19 +148,48 @@ const sampleUsers = [
   // Add more sample users as needed
 ];
 
+/**
+ * TokenManagementPage Component
+ * 
+ * A comprehensive interface for managing user tokens with:
+ * - User search functionality
+ * - Token addition/removal
+ * - Visual token balance indicators
+ * - Responsive dialog for token operations
+ * - Feedback notifications
+ * 
+ * Features:
+ * - Filterable and sortable user table
+ * - Color-coded token balances
+ * - Avatar generation for users
+ * - Input validation
+ * 
+ * @returns {JSX.Element} The Token Management interface
+ */
 export default function TokenManagementPage() {
   //const { users } = useClerk();
+
+  // List of users with tokens
   const [usersList, setUsersList] = useState<any[]>([]);
+  // Loading state
   const [loading, setLoading] = useState(true);
+  // Search term for filtering
   const [searchTerm, setSearchTerm] = useState("");
+  // Dialog visibility
   const [tokenDialogOpen, setTokenDialogOpen] = useState(false);
+  // Currently selected user for token operations
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  // Token input value
   const [tokensToAdd, setTokensToAdd] = useState("1");
+  // Snackbar visibility and message
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  // Snackbar message and severity
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  // Message type 
   const [snackbarSeverity, setSnackbarSeverity] = useState<
     "success" | "error" | "info"
   >("success");
+  // Add/remove mode
   const [isAddingTokens, setIsAddingTokens] = useState(true);
 
   // THIS MIGHT (?) WORK IN ACC IMPLEMENTATION FALL 2025 :)
@@ -201,10 +232,17 @@ export default function TokenManagementPage() {
     }, 1000);
   }, []);
 
+  /**
+   * Handles search input changes
+   * @param {React.ChangeEvent<HTMLInputElement>} event - Input change  
+   */
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
+  /**
+   * Filter users based on search term (matches name or email)
+   */
   const filteredUsers = usersList.filter(
     (user) =>
       user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -215,6 +253,11 @@ export default function TokenManagementPage() {
       ),
   );
 
+  /**
+   * Opens the token management dialog
+   * @param {object} user - The user to manage tokens for
+   * @param {boolean} isAdding - Whether adding (true) or removing (false) tokens
+   */
   const handleTokenDialogOpen = (user: any, isAdding: boolean) => {
     setSelectedUser(user);
     setIsAddingTokens(isAdding);
@@ -222,11 +265,18 @@ export default function TokenManagementPage() {
     setTokenDialogOpen(true);
   };
 
+  /**
+   * Closes the token management dialog
+   */
   const handleTokenDialogClose = () => {
     setTokenDialogOpen(false);
     setSelectedUser(null);
   };
 
+  /**
+   * Handles token input changes with validation
+   * @param {React.ChangeEvent<HTMLInputElement>} event - Input change event 
+   */
   const handleTokenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // Only allow positive numbers
     const value = event.target.value;
@@ -235,6 +285,7 @@ export default function TokenManagementPage() {
     }
   };
 
+  // Submits token changes and updates user balances
   const handleTokenSubmit = () => {
     if (!selectedUser || tokensToAdd === "") return;
 
@@ -264,6 +315,11 @@ export default function TokenManagementPage() {
     handleTokenDialogClose();
   };
 
+  /**
+   * Displays a feedback snackbar message
+   * @param {string} message - The message to display
+   * @param {"success" | "error" | "info" } severity - The message type
+   */
   const showSnackbar = (
     message: string,
     severity: "success" | "error" | "info",
@@ -273,10 +329,16 @@ export default function TokenManagementPage() {
     setSnackbarOpen(true);
   };
 
+  // Closes the snackbar
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
+  /**
+   * Determines color for token badge based on balance
+   * @param {number} tokens - The token count
+   * @returns {string} MUI color name
+   */
   const getTokenColor = (tokens: number) => {
     if (tokens === 0) return "default";
     if (tokens < 5) return "error";
@@ -284,6 +346,12 @@ export default function TokenManagementPage() {
     return "success";
   };
 
+  /**
+   * Generates intials for user avatars
+   * @param {string} firstName - User's first name
+   * @param {string} lastName - User's last name
+   * @returns {string} Initials string (e.g., "JD")
+   */
   const getUserInitials = (firstName: string, lastName: string) => {
     return `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase();
   };

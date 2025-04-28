@@ -2,8 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
+import { CSSProperties } from "react";
 
-// Clerk components
+// Clerk authentication components
 import {
   SignedIn,
   SignedOut,
@@ -14,7 +15,9 @@ import {
 } from "@clerk/nextjs";
 
 // Material-UI components
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { 
+  AppBar, Toolbar, Button, Box 
+} from "@mui/material";
 
 // Material-UI icons
 import BugReportIcon from "@mui/icons-material/BugReport";
@@ -23,18 +26,25 @@ import Library from "@mui/icons-material/LocalLibrary";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import Leaderboard from "@mui/icons-material/Leaderboard";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import { CSSProperties } from "react";
 
 // Clerk button styles
 import "./ClerkButtonStyles.css";
 
-// Props for the NavBar component
+/**
+ * Props for the NavBar component
+ * @interface NavBarProps
+ * @property {string} bugReportFormURL - URL for the bug report form
+ * @property {string} font - Font family to use for text
+ */
 interface NavBarProps {
   bugReportFormURL: string;
   font: string;
 }
 
-// Color scheme
+/**
+ * Color scheme for the navigation bar
+ * @constant
+ */
 const colorScheme = {
   primary: "#CC0000",
   secondary: "#FFFFFF",
@@ -43,31 +53,55 @@ const colorScheme = {
   black: "#000000",
 };
 
-// STYLING
-const appBarStyles: CSSProperties = {
-  backgroundColor: colorScheme.primary,
-  color: colorScheme.secondary,
-  padding: 0,
-  margin: 0,
-  fontFamily: "Whitney SemiBold, sans-serif",
-};
-
+/**
+ * NavBar Component
+ * 
+ * A responsive navigation bar with:
+ * - Authentication controls (login/register/user profile)
+ * - Main navigation links
+ * - Admin-specific links for authorized users
+ * - Bug reporting functionality
+ * - Responsive design for all screen sizes
+ * 
+ * @param {NavBarProps} props - Component props
+ * @returns {React.ReactElement} The navigation bar component
+ */
 const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
   const { user } = useUser();
 
-  // Check if user is an admin
+  // List of admin email addresses
   const adminEmails = [
     "sulafaj@bu.edu",
     "wfugate@bu.edu",
     "alanl193@bu.edu",
     "kalc@bu.edu",
   ];
+
+  /**
+   * Check if current user is an admin
+   * @type {boolean}
+   */
   const isAdmin =
     user &&
     user.primaryEmailAddress?.emailAddress &&
     adminEmails.includes(user.primaryEmailAddress.emailAddress);
 
-  // Button styles
+  /**
+   * Styles for the AppBar component
+   * @type {CSSProperties}
+   */
+  const appBarStyles: CSSProperties = {
+    backgroundColor: colorScheme.primary,
+    color: colorScheme.secondary,
+    padding: 0,
+    margin: 0,
+    fontFamily: "Whitney SemiBold, sans-serif",
+  };
+
+  /**
+   * Base styles for navigation buttons
+   * @type {CSSProperties}
+   */
   const buttonStyle: CSSProperties = {
     color: colorScheme.secondary,
     fontFamily: font,
@@ -76,7 +110,10 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
     alignItems: "center",
   };
 
-  // Button hover styles
+  /**
+   * Hover styles for navigation buttons
+   * @type {CSSProperties}
+   */
   const buttonHoverStyle: CSSProperties = {
     backgroundColor: colorScheme.hover,
     color: colorScheme.secondary,
@@ -96,6 +133,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
           py: { xs: 1, md: 0 },
         }}
       >
+        {/* Logo and title */}
         <Button
           component={Link}
           href="/"
@@ -105,34 +143,35 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
             textAlign: { xs: "center", md: "left" },
             mb: { xs: 0, md: 0 },
             color: colorScheme.secondary,
-            textTransform: "none", // Prevents uppercase transformation
-            fontSize: "1.25rem", // Similar to h6 variant
+            textTransform: "none",
+            fontSize: "1.25rem",
             "&:hover": {
-              backgroundColor: "transparent", // Remove hover background
-              textDecoration: "none", // Remove underline on hover
+              backgroundColor: "transparent", 
+              textDecoration: "none", 
             },
           }}
         >
           The Experimental Mechanics Challenge
         </Button>
-
+        
+        {/* Navigation buttons wrapper */}
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            flexDirection: "row", // Always keep buttons in a row
+            flexDirection: "row", 
             width: { xs: "100%", md: "auto" },
             justifyContent: { xs: "center", md: "flex-end" },
           }}
         >
-          {/* Navigation buttons wrapper */}
+          {/* Main Navigation Buttons */}
           <Box
             sx={{
               display: "flex",
               flexDirection: "row",
-              flexWrap: "nowrap", // Never wrap buttons
+              flexWrap: "nowrap",
               justifyContent: { xs: "flex-start", md: "flex-start" },
-              minWidth: { xs: "max-content", md: "auto" }, // Ensure buttons don't shrink
+              minWidth: { xs: "max-content", md: "auto" }, 
             }}
           >
             {/* For Signed In Users */}
@@ -146,7 +185,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                   ...buttonStyle,
                   "&:hover": buttonHoverStyle,
                   mr: { xs: 1, md: 1 },
-                  fontSize: { xs: "0.75rem", md: "0.8rem" }, // Shrink font size on small screens
+                  fontSize: { xs: "0.75rem", md: "0.8rem" }, 
                 }}
               >
                 <AccountCircle />
