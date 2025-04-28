@@ -1,185 +1,85 @@
 # SP'25 Autonomous Mechanics Challenge
 
-## Setup Instructions
+## Project Structure
+### Frontend Overview: `app/`
+This is the main application source folder. It is organized into API routes, UI components, pages, and metadata utilities.
+- `page.tsx` - root `/` home page
+- `layout.tsx` - global layout of the website
 
-First, choose your preferred setup method:
+### `api/`
+Contains backend server-side API routes (Next.js route handlers)
+- `fetch-metadata/` 
+   - fetches article metadata (e.g., title, description, image) from a provided URL.
+- `leaderboard/`
+   - handles leaderboard functionality (e.g., retrieving top scores)
 
-<details>
-<summary><b>Quick Setup (Using Setup Scripts)</b></summary>
+### `components/`
+Contains frontend UI components - reusable across pages.
+- `Account/` 
+   - `InfoTab.tsx` - displays user account information
+   - `NewExpTab.tsx` - UI for submitting a new experiment/task
+   - `StatusTab.tsx` - shows the status/history of experiments
+   - `STLViewer.tsx` - 3D viewer for STL files/models
+- `Admin/` 
+   - `Navigation.tsx` - admin-specific navigation component for switching between approval, syslog, token management, and user management sections.
+- `Navigation/`
+   - `ClerkButtonStyles.css` - custom CSS overrrides for Clerk authentication buttons
+   - `NavBar.tsx` - main site navigation bar for authenticated and unauthenticated users
 
-Choose your operating system:
+### `metadata/`
+- `design.tsx` - contains design utilities related to fetching, styling, or handling metadata (e.g., theming article cards, colors).
 
-<details>
-<summary><b>Windows</b></summary>
+### `pages/`
+Contains frontend route pages. Each folder or file corresponds to a URL path.
+- `account/` 
+   - `page.tsx` - landing page for a user's personal account
+   - `newexp/page.tsx` - new experiment creation-related subpages
+- `admin/` 
+   - Admin dashboard area:
+      - `approval/` - manage pending experiment approval requests 
+      - `syslogs/` - view system logs/events
+      - `tokens/` - manage user token allocation
+      - `uses/` - view or manage user accounts
+- `bear-status/` 
+   - `page.tsx` - displays the status of BEAR robot experiments 
+- `leaderboard/`
+   - `page.tsx` - displays a leaderboard of all submissions
+- `library/`
+   - `page.tsx` - displays user's past experiments
 
-1. **Clone the repository**
+### Backend Overview
+- `app/api/` - small serverless tasks (e.g., fetching metadata, leaderboard)
+- `backend/server.py` - handles 3D model rendering (.stl file creation)
 
-   ```bash
-   git clone -b dev --single-branch https://github.com/BU-Spark/se-bu-eng-3d-printing-robot.git
-   cd se-bu-eng-3d-printing-robot
-   ```
+### Database Overview
+This project utilizes the client's mySQL database. It uses Prisma ORM to simplify database interactions for the NextJS application.
+- `prisma/scheme.prisma` - contains the schema for the client's mySQL database
 
-2. **Run the setup script**
+### Environment Variables
+- `DATABASE_URL` - client's mySQL database (currenly using a SQL dump file)
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - obtained through clerk
+- `CLERK_SECRET_KEY` - obtained through clerk
+- `NEXT_PUBLIC_BACKEND_URL` - the backend url to connect to the frontend for 3D model rendering
 
-   ```bash
-   bash.bat
-   ```
+## Running the Application
+First install all necessary dependencies for the frontend
+```
+npm install
+```
+Run the frontend application
+```
+npm run dev
+```
+In a new terminal, navigate to the backend 
+```
+cd backend
+```
+Install all necessary dependencies for the backend
+```
+pip install -r requirements.txt
+```
 
-   This script will:
-
-   - Create and activate a Python virtual environment
-   - Install all dependencies
-   - Optionally start the development server
-
-3. **Access the application**
-   - Open your browser and go to [http://localhost:3000](http://localhost:3000)
-   </details>
-
-<details>
-<summary><b>Mac/Linux</b></summary>
-
-1. **Clone the repository**
-
-   ```bash
-   git clone -b dev --single-branch https://github.com/BU-Spark/se-bu-eng-3d-printing-robot.git
-   cd se-bu-eng-3d-printing-robot
-   ```
-
-2. **Run the setup script**
-
-   Make the script executable:
-
-   ```bash
-   chmod +x bash
-   ```
-
-   Run the script:
-
-   ```bash
-   ./bash
-   ```
-
-   This script will:
-
-   - Create and activate a Python virtual environment
-   - Install all dependencies
-   - Optionally start the development server
-
-3. **Access the application**
-   - Open your browser and go to [http://localhost:3000](http://localhost:3000)
-   </details>
-   </details>
-
-<details>
-<summary><b>Manual Setup</b></summary>
-
-Choose your operating system:
-
-<details>
-<summary><b>Windows</b></summary>
-
-1. **Clone the repository**
-
-   ```bash
-   git clone -b dev --single-branch https://github.com/BU-Spark/se-bu-eng-3d-printing-robot.git
-   cd se-bu-eng-3d-printing-robot
-   ```
-
-2. **Create Virtual Environment**
-
-   ```bash
-   python -m venv venv
-   ```
-
-3. **Activate Virtual Environment**
-
-   ```bash
-   venv\Scripts\activate
-   ```
-
-4. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-5. **Configure environment variables**
-
-   - Look at the `.env.example` file in the project
-   - Create a new file named `.env` based on the example
-   - Fill in the required environment variables
-
-6. **Start the development server**
-
-   ```bash
-   npm run dev
-   ```
-
-7. **Access the application**
-
-   - Open your browser and go to [http://localhost:3000](http://localhost:3000)
-
-8. **When finished, deactivate the virtual environment**
-   ```bash
-   deactivate
-   ```
-   </details>
-
-<details>
-<summary><b>Mac/Linux</b></summary>
-
-1. **Clone the repository**
-
-   ```bash
-   git clone -b dev --single-branch https://github.com/BU-Spark/se-bu-eng-3d-printing-robot.git
-   cd se-bu-eng-3d-printing-robot
-   ```
-
-2. **Create Virtual Environment**
-
-   ```bash
-   python3 -m venv venv
-   ```
-
-3. **Activate Virtual Environment**
-
-   ```bash
-   source venv/bin/activate
-   ```
-
-4. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-5. **Configure environment variables**
-
-   - Look at the `.env.example` file in the project
-   - Create a new file named `.env` based on the example
-   - Fill in the required environment variables
-
-6. **Start the development server**
-
-   ```bash
-   npm run dev
-   ```
-
-7. **Access the application**
-
-   - Open your browser and go to [http://localhost:3000](http://localhost:3000)
-
-8. **When finished, deactivate the virtual environment**
-   ```bash
-   deactivate
-   ```
-   </details>
-   </details>
-
-## Technologies
-
-This project uses:
-
-- **Next.js with Prisma** for the backend and database management
-- **Material UI** for the frontend components and styling
-- **Clerk** for authentication and user management
+Run the backend server
+```
+uvicorn server:app --reload
+```
