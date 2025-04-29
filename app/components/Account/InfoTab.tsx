@@ -5,22 +5,12 @@ import { motion } from "framer-motion";
 
 // Material UI components
 import {
-  TextField,
-  Typography,
-  Box,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  IconButton,
-  Tooltip,
-  Snackbar,
-  Avatar,
-  Stack,
-  Chip,
-  Alert,
-  alpha,
+  TextField, Typography, Box,
+  Paper, List, ListItem,
+  ListItemText, Divider, IconButton,
+  Tooltip, Snackbar, Avatar,
+  Stack, Chip, Alert,
+  alpha
 } from "@mui/material";
 
 // Material UI icons
@@ -31,7 +21,11 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
-// Function to determine affiliation from email domain
+/**
+ * Determines the user's institutional affiliation based on their email domain
+ * @param {string | undefined} email - The user's email address
+ * @returns {string} - The detected affiliation or an empty string if not found
+ */
 function getAffiliationFromEmail(email: string | undefined): string {
   if (!email) return "";
 
@@ -55,10 +49,27 @@ function getAffiliationFromEmail(email: string | undefined): string {
   return domainMap[domain] || "No Affiliation Detected";
 }
 
+/**
+ * User InfoTab Component
+ * 
+ * Displays user profile information, account details, and session information
+ * with animations and interactive elements. Handles:
+ * - User profile display with avatar
+ * - Email-based affiliation detection
+ * - Session information with copy functionality
+ * - Responsive layout for different screen sizes
+ * 
+ * @param {Object} props - Component props
+ * @param {Object} props.user - User data from authentication
+ * @param {Object} props.session - Session information
+ * @returns {JSX.Element} - The InfoTab component
+ */
 export default function InfoTab({ user, session }: any) {
+  // State for managing affiliation and snackbar visibility
   const [affiliation, setAffiliation] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+  // Effect to set affiliation when user email changes
   useEffect(() => {
     if (user?.primaryEmailAddress?.emailAddress) {
       const suggestedAffiliation = getAffiliationFromEmail(
@@ -68,7 +79,7 @@ export default function InfoTab({ user, session }: any) {
     }
   }, [user]);
 
-  // If user is not signed in, display a message
+  // Handle case when user is not signed in
   if (!user) {
     return (
       <Box
@@ -88,7 +99,7 @@ export default function InfoTab({ user, session }: any) {
     );
   }
 
-  // Copy session ID to clipboard
+  // Copies the session ID to the clipboard and shows a snackbar notification
   const copySessionId = () => {
     if (session?.id) {
       navigator.clipboard.writeText(session.id);

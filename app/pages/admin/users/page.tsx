@@ -1,39 +1,22 @@
-// app/pages/admin/users/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
+
+// Material UI Components
 import {
-  Typography,
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Button,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Alert,
-  Snackbar,
-  CircularProgress,
-  Tabs,
-  Tab,
-  Card,
-  CardContent,
-  Avatar,
-  Chip,
-  styled,
-  alpha,
-  Tooltip,
+  Typography, Box, Paper,
+  Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow,
+  Button, TextField, InputAdornment,
+  IconButton, Dialog, DialogActions,
+  DialogContent, DialogContentText, DialogTitle,
+  Alert, Snackbar, CircularProgress,
+  Tabs, Tab, Card,
+  CardContent, Avatar, Chip,
+  styled, alpha, Tooltip,
 } from "@mui/material";
+
+// Material UI Icons
 import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BlockIcon from "@mui/icons-material/Block";
@@ -44,7 +27,9 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useClerk } from "@clerk/nextjs";
 
-// Styled components
+/**
+ * StyledTab - Custom styled Tab component
+ */
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontWeight: 600,
   "&.Mui-selected": {
@@ -52,18 +37,27 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   },
 }));
 
+/**
+ * StyledTabs - Custom styled Tabs component
+ */
 const StyledTabs = styled(Tabs)({
   "& .MuiTabs-indicator": {
     backgroundColor: "#CC0000",
   },
 });
 
+/**
+ * ActionButton - Custom styled Button component
+ */
 const ActionButton = styled(Button)(({ theme }) => ({
   textTransform: "none",
   borderRadius: 8,
   fontWeight: 600,
 }));
 
+/**
+ * StyledTableHead - Custom styled TableHead component
+ */
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
   "& .MuiTableCell-head": {
     fontWeight: 600,
@@ -72,6 +66,9 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
   },
 }));
 
+/**
+ * UserAvatar - Custom styled Avatar component
+ */
 const UserAvatar = styled(Avatar)(({ theme }) => ({
   backgroundColor: alpha("#CC0000", 0.1),
   color: "#CC0000",
@@ -79,12 +76,23 @@ const UserAvatar = styled(Avatar)(({ theme }) => ({
   height: 36,
 }));
 
+/**
+ * StatusChip - Custom styled Chip component
+ */
 const StatusChip = styled(Chip)(({ theme }) => ({
   fontWeight: 600,
   fontSize: "0.75rem",
 }));
 
-// Sample user data - this would be replaced with real data
+/**
+ * Sample user data structure - would be replaced with real API data
+ * Each user contains:
+ * - Unique ID
+ * - First and Last name
+ * - Email address
+ * - Registration date
+ * - Tokens available (or "NA" for unauthorized users)
+ */
 const sampleUsers = [
   {
     id: "user_1",
@@ -128,28 +136,57 @@ const sampleUsers = [
   },
 ];
 
-// Sample blocked users
+/**
+ * Sample blocked users data structure
+ * Each blocked user contains:
+ * - Email address
+ * - Date when they were blocked
+ */
 const sampleBlockedUsers: { email: string; blockedAt: string }[] = [];
 
+/**
+ * UserManagementPage - Main component for user management page
+ * - User listing and search
+ * - Block/unblock functionality
+ * - User removal
+ * - Token status tracking
+ * - Tabbed interface for active users and blocked users
+ * 
+ * @returns {JSX.Element} - Rendered component
+ */
 export default function UserManagementPage() {
   //const { users } = useClerk();
+
+  // Active users list
   const [usersList, setUsersList] = useState<any[]>([]);
+  // Blocked users list
   const [blockedUsers, setBlockedUsers] = useState<
     { email: string; blockedAt: string }[]
   >([]);
+  // Loading state
   const [loading, setLoading] = useState(true);
+  // Search term for filtering users
   const [searchTerm, setSearchTerm] = useState("");
+  // Email to block
   const [blockEmail, setBlockEmail] = useState("");
+  // Dialog state for user deletion confirmation
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  // User to delete
   const [userToDelete, setUserToDelete] = useState<any>(null);
+  // Snackbar state for notifications
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  // Snackbar message and severity
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  // Snackbar severity (success or error)
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success",
   );
+  // Active tab state (0 for Users, 1 for Blocked Users)
   const [activeTab, setActiveTab] = useState(0);
+  // Number of visible rows in the table
   const [visibleRows, setVisibleRows] = useState(5);
 
+  // Load sample data on component mount
   useEffect(() => {
     // Using sample data instead of Clerk for now
     setUsersList(sampleUsers);
@@ -157,21 +194,35 @@ export default function UserManagementPage() {
     setLoading(false);
   }, []);
 
+  /**
+   * Handles search input changes
+   * @param {React.ChangeEvent<HTMLInputElement>} event - Input change event
+   */
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
+  /**
+   * Handles block email input changes
+   * @param {React.ChangeEvent<HTMLInputElement>} event - Input change event
+   */
   const handleBlockEmailChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setBlockEmail(event.target.value);
   };
 
+  /**
+   * Handles tab changes
+   * @param {React.SyntheticEvent} event - Tab change event
+   * @param {number} newValue - New tab value
+   */
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
     setSearchTerm("");
   };
 
+  // Filter active users based on search term
   const filteredUsers = usersList.filter(
     (user) =>
       user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -179,26 +230,31 @@ export default function UserManagementPage() {
       user.email?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  // Get subset of users for pagination
   const displayedUsers = filteredUsers.slice(0, visibleRows);
 
+  // Filter blocked users based on search term
   const filteredBlockedUsers = blockedUsers.filter((user) =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  /**
+   * Opens the delete confirmation dialog
+   * @param {object} user - User to be deleted
+   */
   const handleDeleteClick = (user: any) => {
     setUserToDelete(user);
     setDeleteDialogOpen(true);
   };
 
+  /**
+   * Handles user deletion confirmation
+   */
   const handleDeleteConfirm = async () => {
     if (!userToDelete) return;
 
     try {
       setLoading(true);
-      // In a real implementation, you would call the Clerk API to delete the user
-      // For now, we'll just simulate it
-      // await users.deleteUser(userToDelete.id);
-
       // Remove the user from our local state
       setUsersList((prevUsers) =>
         prevUsers.filter((user) => user.id !== userToDelete.id),
@@ -217,11 +273,17 @@ export default function UserManagementPage() {
     }
   };
 
+  /**
+   * Handles canceling the delete confirmation dialog
+   */
   const handleDeleteCancel = () => {
     setDeleteDialogOpen(false);
     setUserToDelete(null);
   };
 
+  /**
+   * Blocks a user by adding them to the blocked users list
+   */
   const blockUser = () => {
     if (!blockEmail || !blockEmail.trim()) {
       showSnackbar("Please enter a valid email address", "error");
@@ -249,37 +311,62 @@ export default function UserManagementPage() {
     showSnackbar(`User with email ${blockEmail} has been blocked`, "success");
   };
 
+  /**
+   * Unblocks a user by email
+   * @param {string} email - Email of the user to unblock
+   */
   const unblockUser = (email: string) => {
     setBlockedUsers((prev) => prev.filter((user) => user.email !== email));
     showSnackbar(`User with email ${email} has been unblocked`, "success");
   };
 
+  /**
+   * Shows feedback snackbar
+   * @param {string} message - Message to display
+   * @param {"success" | "error"} severity - Severity of the message
+   */
   const showSnackbar = (message: string, severity: "success" | "error") => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
   };
 
+  /**
+   * Handles snackbar close event
+   */
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
+  /**
+   * Shows more rows in the user table
+   */
   const showMoreRows = () => {
     setVisibleRows((prev) => prev + 5);
   };
 
+  /**
+   * Shows fewer rows in the user table
+   */
   const showLessRows = () => {
     setVisibleRows((prev) => Math.max(5, prev - 5));
   };
 
-  // Check if a user is already blocked
+  /**
+   * Check if a user is blocked by email
+   * @param {string} email - Email of the user to check
+   * @returns {boolean} - True if the user is blocked, false otherwise
+   */
   const isUserBlocked = (email: string) => {
     return blockedUsers.some(
       (blockedUser) => blockedUser.email.toLowerCase() === email.toLowerCase(),
     );
   };
 
-  // Block a user from the Users tab
+  /**
+   * Blocks a user from the active user list
+   * @param {object} user - User object to block 
+   */
   const blockUserFromList = (user: any) => {
     if (isUserBlocked(user.email)) {
       showSnackbar(

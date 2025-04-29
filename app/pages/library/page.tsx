@@ -1,37 +1,35 @@
 "use client";
 
 import { useState } from "react";
+
+// Material UI components
 import {
-  Box,
-  Typography,
-  TextField,
-  MenuItem,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Card,
-  CardContent,
-  IconButton,
-  Chip,
-  InputAdornment,
-  alpha,
-  ThemeProvider,
-  createTheme,
+  Box, Typography, TextField,
+  MenuItem, Table, TableBody,
+  TableCell, TableContainer, TableHead,
+  TableRow, Card, CardContent,
+  IconButton, Chip, InputAdornment,
+  alpha, ThemeProvider, createTheme,
   useTheme,
 } from "@mui/material";
 
-// Icons
+// Material UI icons
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
+/**
+ * Type definition for custom theme
+ */
 type CustomTheme = ReturnType<typeof createTheme>;
 
+/**
+ * Creates a custom theme based on the base theme with customized palette colors
+ * @param baseTheme - The base theme to extend
+ * @returns A new theme object with customized colors
+ */
 const createCustomTheme = (baseTheme: CustomTheme): CustomTheme =>
   createTheme({
     ...baseTheme,
@@ -52,11 +50,15 @@ const createCustomTheme = (baseTheme: CustomTheme): CustomTheme =>
     },
   });
 
+/**
+ * Main component for the Library page
+ * @returns JSX element representing the Library page
+ */
 export default function LibraryPage() {
   const baseTheme = useTheme();
   const theme = createCustomTheme(baseTheme);
 
-  // State for filters
+  // Toggle states for showing F-D figures and filters
   const [showFDFigure, setShowFDFigure] = useState(true);
   const [partImageFilter, setPartImageFilter] = useState("Unit Cell");
   const [wadlIdFilter, setWadlIdFilter] = useState("Equals");
@@ -68,7 +70,9 @@ export default function LibraryPage() {
   const [energyPerMassValue, setEnergyPerMassValue] = useState("");
   const [showFilters, setShowFilters] = useState(true);
 
-  // Sample data for the table
+  /**
+   * Sample data for experiments table
+   */
   const experimentData = [
     {
       id: 1,
@@ -117,7 +121,10 @@ export default function LibraryPage() {
     },
   ];
 
-  // Count active filters
+  /**
+   * Counts the number of active filters
+   * Used to display the filter count chip
+   */
   const activeFiltersCount = [
     wadlIdValue !== "",
     unitCellTypeFilter !== "",
@@ -125,7 +132,9 @@ export default function LibraryPage() {
     energyPerMassValue !== "",
   ].filter(Boolean).length;
 
-  // Clear all filters
+  /**
+   * Clears all filter values
+   */
   const clearFilters = () => {
     setWadlIdValue("");
     setUnitCellTypeFilter("");

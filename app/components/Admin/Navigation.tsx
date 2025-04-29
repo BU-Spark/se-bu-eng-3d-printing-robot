@@ -2,23 +2,17 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+
+// Material UI components
 import {
-  Box,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  IconButton,
-  useMediaQuery,
-  useTheme,
-  Avatar,
-  Tooltip,
-  Badge,
-  Paper,
+  Box, Drawer, List,
+  ListItemButton, ListItemIcon, ListItemText,
+  Typography, IconButton, useMediaQuery,
+  useTheme, Avatar, Tooltip,
+  Badge, Paper,
 } from "@mui/material";
 
+// Material UI icons
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -27,7 +21,9 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import TokenIcon from "@mui/icons-material/Token";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 
-// Simplified user type
+/**
+ * Interface for simplified user data
+ */
 interface SimplifiedUser {
   id: string;
   firstName: string | null;
@@ -36,10 +32,16 @@ interface SimplifiedUser {
   imageUrl: string;
 }
 
+/**
+ * Props for the AdminNavbar component
+ */
 interface AdminNavbarProps {
   user: SimplifiedUser;
 }
 
+/**
+ * Color scheme for the admin navbar
+ */
 const colorScheme = {
   primary: "#CC0000",
   primaryLight: "rgba(204, 0, 0, 0.1)",
@@ -57,21 +59,39 @@ const colorScheme = {
   navShadow: "10px 0 25px -5px rgba(0, 0, 0, 0.05)",
 };
 
+// Layout constants
 const drawerWidth = 280;
 const collapsedDrawerWidth = 84;
 const globalNavHeight = 64;
 
+/**
+ * AdminNavbar Component
+ * 
+ * A responsive navigation sidebar for admin dashboard with:
+ * - Collapsible/expandable functionality
+ * - User profile display
+ * - Navigation menu with icons and badges
+ * - Mobile-responsive design
+ * - Smooth transitions and hover effects
+ */
 export default function AdminNavbar({ user }: AdminNavbarProps) {
+  // Theme
   const theme = useTheme();
+
+  // State hooks for mobile drawer
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // State hooks for open/close functionality and selected page
   const [open, setOpen] = useState(true);
   const [selectedPage, setSelectedPage] = useState("Dashboard");
 
+  // Handlers for drawer state
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
 
+  // Navigation menu items
   const menuItems = [
     {
       text: "Dashboard",
@@ -105,12 +125,19 @@ export default function AdminNavbar({ user }: AdminNavbarProps) {
     },
   ];
 
+  /**
+   * Gets user initials from first and last name
+   * @returns {string} Initials of the user
+   */
   const getInitials = () => {
     const firstName = user.firstName || "";
     const lastName = user.lastName || "";
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
+  /**
+   * Main drawer content component
+   */
   const drawerContent = (
     <Box
       sx={{
@@ -121,6 +148,7 @@ export default function AdminNavbar({ user }: AdminNavbarProps) {
         backdropFilter: "blur(10px)",
       }}
     >
+      {/* User Profile Section */}
       <Box
         sx={{
           p: 3,
@@ -134,6 +162,7 @@ export default function AdminNavbar({ user }: AdminNavbarProps) {
         }}
       >
         {open ? (
+          // Expanded view with user details
           <>
             <Paper
               elevation={0}
@@ -194,6 +223,7 @@ export default function AdminNavbar({ user }: AdminNavbarProps) {
             </Typography>
           </>
         ) : (
+          // Collapsed view with only initials
           <Tooltip
             title={`${user.firstName} ${user.lastName}`}
             placement="right"
@@ -214,6 +244,7 @@ export default function AdminNavbar({ user }: AdminNavbarProps) {
         )}
       </Box>
 
+      {/* Drawer Toggle Button for Mobile */}
       {!isMobile && (
         <Box
           display="flex"
@@ -242,6 +273,7 @@ export default function AdminNavbar({ user }: AdminNavbarProps) {
         </Box>
       )}
 
+      {/* Navigation Menu */}
       <List sx={{ mt: 2, px: 2, flexGrow: 1 }}>
         {menuItems.map((item) => {
           const isSelected = selectedPage === item.text;
@@ -325,6 +357,7 @@ export default function AdminNavbar({ user }: AdminNavbarProps) {
                     display: open ? "block" : "none",
                   }}
                 />
+                {/* Selection indicator */}
                 {isSelected && (
                   <Box
                     sx={{
@@ -343,7 +376,8 @@ export default function AdminNavbar({ user }: AdminNavbarProps) {
           );
         })}
       </List>
-
+      
+      {/* Footer Section */}
       {open && (
         <Paper
           elevation={0}
