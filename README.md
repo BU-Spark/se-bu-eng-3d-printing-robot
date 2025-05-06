@@ -59,8 +59,8 @@ Before you begin, ensure you have the following installed:
 
 1.  **Clone the Repository:**
     ```bash
-    git clone <your-repository-url>
-    cd <repository-directory>
+    git clone https://github.com/BU-Spark/se-bu-eng-3d-printing-robot
+    cd https://github.com/BU-Spark/se-bu-eng-3d-printing-robot
     ```
 
 2.  **Install Frontend Dependencies:**
