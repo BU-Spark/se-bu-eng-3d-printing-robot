@@ -4,6 +4,13 @@
 
 This project provides the web interface for the Autonomous Mechanics Challenge, allowing users to interact with Boston University's Bayesian Experimental Autonomous Researcher (BEAR) platform. Users can design mechanical structures, submit them for automated 3D printing and testing by the BEAR robot, track the status of their experiments, view results, and compare performance on a public leaderboard. The platform also includes an administrative dashboard for managing users, approvals, tokens, and system logs.
 
+## Known Issues
+- **Next Steps** are listed [here](https://github.com/BU-Spark/se-bu-eng-3d-printing-robot/tree/dev?tab=readme-ov-file#next-steps).
+- **Security Vulnerabilities:** Initially, admin email addresses were hard-coded in the frontend, posing a security risk. These emails have since been moved to environment variables for improved security. As a next step, storing admin emails in a database would allow for more flexible and secure identity management by enabling dynamic control over admin users.
+- **Slow 3D Rendering:** Previously, the backend experienced high request volumes due to rapid parameter changes from the frontend. To mitigate this, a debouncer was implemented to limit the frequency of requests. While this reduced server load, the 3D model rendering remains slow and may require further optimization.
+- **Hydration Error:** A hydration mismatch error occurs when the project initially loads. While refreshing the page temporarily resolves the issue, a more permanent fix is needed to ensure consistent rendering across server and client.
+
+
 ## Features
 
 * **User Authentication:** Secure sign-up and login using Clerk.
@@ -25,6 +32,7 @@ This project provides the web interface for the Autonomous Mechanics Challenge, 
 * **Testing:** Jest, React Testing Library
 * **Linting/Formatting:** ESLint, Prettier
 * **Deployment:** Railway (Configuration files included)
+![techstack](./readme/techstack.png)
 
 ## Key Files & Directories
 
@@ -42,6 +50,56 @@ This project provides the web interface for the Autonomous Mechanics Challenge, 
     * **`schema.prisma`**: Defines the database schema, models, and connection details used by Prisma to interact with the MySQL database.
 * **`.env.example`**: Template file showing the required environment variables. Needs to be copied to `.env` and filled with actual values.
 * **`package.json`**: Defines frontend project metadata, dependencies (`npm install`), and scripts (`npm run dev`, `npm run build`, `npm test`, etc.).
+
+Below is a simplfied flow of how each file (structure) interacts with each other.
+```mermaid
+flowchart LR
+    User([User]) -->|Auth| Clerk
+    User --> Frontend
+    Frontend -->|API Calls| Backend
+    Backend -->|Prisma| MySQL
+    Backend -->|Generates| STL{{gcs-shape}}
+
+    subgraph Frontend["Next.js App"]
+        Layout[layout.tsx] --> Pages
+        Pages --> Components
+        subgraph API["API Routes"]
+            LeaderboardAPI["/api/leaderboard"]
+            MetadataAPI["/api/fetch-metadata"]
+        end
+        Clerk -->|Protects| Pages
+    end
+
+    subgraph Backend["Python Service"]
+        FastAPI[server.py]
+        STL_Generator[/generate-stl/]
+    end
+
+    subgraph Data["Data Layer"]
+        Prisma[[Prisma ORM]]
+        MySQL[(MySQL)]
+    end
+
+    %% Key Connections
+    LeaderboardAPI -->|Reads via| Prisma
+    Components -->|Uses| API
+    STL_Generator -->|Uses| STL
+
+    %% Styling
+    classDef frontend fill:#e3f2fd,stroke:#2196f3
+    classDef backend fill:#ffebee,stroke:#f44336
+    classDef storage fill:#e8f5e9,stroke:#4caf50
+    classDef auth fill:#fff8e1,stroke:#ffc107
+    classDef api fill:#c8e6c9,stroke:#66bb6a
+    classDef user fill:#f5f5f5,stroke:#9e9e9e
+
+    class Frontend,Pages,Components frontend
+    class Backend,FastAPI,STL_Generator backend
+    class Data,Prisma,MySQL storage
+    class Clerk auth
+    class API,LeaderboardAPI,MetadataAPI api
+    class User user
+```
 
 ## Prerequisites
 
@@ -140,6 +198,12 @@ This project uses Jest and React Testing Library for frontend component testing.
     ```bash
     npm run test:coverage
     ```
+
+## Deployment
+Currently the application has been deployed on Railway. 
+- The frontend is deployed [here](https://amc-frontend-dev.up.railway.app/).
+- The backend is deployed [here](https://amc-backend-dev.up.railway.app/).
+- The database is deployed. Currently, the database has been seeded with the SQL dump file provided to us by the client. 
 
 ## Next Steps
 
