@@ -15,15 +15,15 @@ This project provides the web interface for the Autonomous Mechanics Challenge, 
 
 * **User Authentication:** Secure sign-up and login using Clerk.
 * **Experiment Design:** Interactive interface to define geometric and material parameters for mechanical designs.
-* **Real-time 3D Visualization:** View generated STL models using Three.js before submission.
+* **Real-time 3D Visualization:** View generated STL models using Three.js before submission. Model is rendered in the backend using the [GCS Python library](https://github.com/bu-shapelab/gcs).
 * **Status Tracking:** Monitor the progress of submitted experiments and view historical results.
-* **Leaderboard:** Compare the performance (e.g., Toughness/Mass ratio) of different experiments.
+* **Leaderboard:** Compare the performance (e.g., Toughness/Mass ratio) of different experiments. Filter and search through various experiments using multiple parameters.
 * **Design Library:** Browse past experiment results and designs.
 * **Admin Dashboard:** Secure area for administrators to manage users, approvals, system logs, and token distribution.
 
 ## Technology Stack
 
-* **Frontend:** Next.js (App Router), React 19, TypeScript, Material UI (MUI), Three.js, Framer Motion
+* **Frontend:** Next.js (App Router), React 19, TypeScript, Material UI (MUI), Three.js, Framer Motion (Animation)
 * **Backend (3D Model Generation):** Python, FastAPI, GCS-Shape
 * **Backend (API Routes):** Next.js API Routes
 * **Database:** MySQL
@@ -39,7 +39,9 @@ This project provides the web interface for the Autonomous Mechanics Challenge, 
 * **`app/`**: The core directory for the Next.js frontend application.
     * **`layout.tsx`**: Defines the root layout, including the main NavBar and Clerk provider wrapping the application.
     * **`page.tsx`**: The main landing/home page component (`/`).
-    * **`api/`**: Contains serverless API route handlers managed by Next.js (e.g., `/api/leaderboard`, `/api/fetch-metadata`).
+    * **`api/`**: Contains serverless API route handlers managed by Next.js.
+        - `leaderboard` - fetches and loads experiment data from the MySQL database.
+        - `fetch-metadata` - fetches article's metadata to be displayed on the homepage `/`.
     * **`components/`**: Houses reusable React components used across different pages (e.g., `NavBar.tsx`, `STLViewer.tsx`, Admin components, Account tabs).
     * **`pages/`**: Defines the application's routes/pages (e.g., `/account`, `/admin`, `/leaderboard`). Each folder maps to a URL path segment.
     * **`metadata/design.tsx`**: Configuration defining the parameters, limits, and defaults for the interactive design tool (`NewExpTab.tsx`).
@@ -135,6 +137,7 @@ Before you begin, ensure you have the following installed:
         * `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`: Your publishable key from your Clerk application dashboard.
         * `CLERK_SECRET_KEY`: Your secret key from your Clerk application dashboard.
         * `NEXT_PUBLIC_BACKEND_URL`: The URL where the Python backend server will run. For local development, this will typically be `http://127.0.0.1:8000`.
+        * `ADMIN_EMAILS` : Administrative emails that will grant them access to the admin dashboard. 
 
 4.  **Install Backend Dependencies:**
     * Navigate to the backend directory:
