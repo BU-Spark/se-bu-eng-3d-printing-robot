@@ -203,11 +203,7 @@ This project uses Jest and React Testing Library for frontend component testing.
 Currently the application has been deployed on Railway. 
 - The frontend is deployed [here](https://amc-frontend-dev.up.railway.app/).
 - The backend is deployed [here](https://amc-backend-dev.up.railway.app/).
-<<<<<<< HEAD
 - The database is deployed. Currently, the database has been seeded with the SQL dump file provided to us by the client. 
-=======
-- The database is deployed using the client's SQL dump file.
->>>>>>> 788d086 (Update README.md)
 
 ## Next Steps
 
