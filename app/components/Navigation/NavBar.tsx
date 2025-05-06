@@ -70,12 +70,7 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
   const { user } = useUser();
 
   // List of admin email addresses
-  const adminEmails = [
-    "sulafaj@bu.edu",
-    "wfugate@bu.edu",
-    "alanl193@bu.edu",
-    "kalc@bu.edu",
-  ];
+  const adminEmails = process.env.ADMIN_EMAILS?.split(',') || [];
 
   /**
    * Check if current user is an admin

@@ -31,17 +31,7 @@ export default async function AdminLayout({
   if (!user) redirect("/");
 
   // List of authorized admin emails
-  const adminEmails = [
-    "sulafaj@bu.edu",
-    "wfugate@bu.edu",
-    "alanl193@bu.edu",
-    "kalc@bu.edu",
-
-    // Client emails
-    "brownka@bu.edu",
-    "sssilver@bu.edu",
-    "whiting@bu.edu"
-  ];
+  const adminEmails = process.env.ADMIN_EMAILS?.split(',') || [];
   
   // Get the user's primary email address
   const userEmail = user.emailAddresses[0]?.emailAddress;

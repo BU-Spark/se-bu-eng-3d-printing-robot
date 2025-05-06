@@ -1,4 +1,7 @@
 module.exports = {
+  env: {
+    ADMIN_EMAILS: process.env.ADMIN_EMAILS,
+  },
   async rewrites() {
     return [
       {

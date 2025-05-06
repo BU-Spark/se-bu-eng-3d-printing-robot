@@ -8,7 +8,7 @@ describe("AdminNavbar", () => {
     id: "1",
     firstName: "user",
     lastName: "name",
-    email: "alanl193@bu.edu",
+    email: "user@bu.edu",
     imageUrl: "",
   };
 
