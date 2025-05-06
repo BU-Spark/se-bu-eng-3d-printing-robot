@@ -9,7 +9,6 @@ This project provides the web interface for the Autonomous Mechanics Challenge, 
 * **User Authentication:** Secure sign-up and login using Clerk.
 * **Experiment Design:** Interactive interface to define geometric and material parameters for mechanical designs.
 * **Real-time 3D Visualization:** View generated STL models using Three.js before submission.
-* **Experiment Submission:** Submit designs to the BEAR system queue (requires tokens).
 * **Status Tracking:** Monitor the progress of submitted experiments and view historical results.
 * **Leaderboard:** Compare the performance (e.g., Toughness/Mass ratio) of different experiments.
 * **Design Library:** Browse past experiment results and designs.
@@ -79,15 +78,7 @@ Before you begin, ensure you have the following installed:
         * `CLERK_SECRET_KEY`: Your secret key from your Clerk application dashboard.
         * `NEXT_PUBLIC_BACKEND_URL`: The URL where the Python backend server will run. For local development, this will typically be `http://127.0.0.1:8000`.
 
-4.  **Set Up Database Schema:**
-    * Ensure your MySQL database server is running and the database specified in `DATABASE_URL` exists.
-    * Apply the Prisma schema to your database. This will create the necessary tables based on `prisma/schema.prisma`.
-        ```bash
-        npx prisma db push
-        ```
-    * *(Note: If you have a SQL dump file to populate the database, import it using your preferred MySQL client after running `db push`.)*
-
-5.  **Install Backend Dependencies:**
+4.  **Install Backend Dependencies:**
     * Navigate to the backend directory:
         ```bash
         cd backend
