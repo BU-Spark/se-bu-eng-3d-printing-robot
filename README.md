@@ -225,12 +225,12 @@ The following are key areas planned for future development:
 - Previous experiments page is hardcoded, mock data.
 - Tokens along with users and their storage have not been implemented.
 - 3d Visualizer will not load on initial open unless a parameter is changed.
-- Library page is hardcoded, mock data
+- Library page is hardcoded, mock data.
 - Bear STATUS is unconnected to the BEAR.
 - Leaderboard is unconnected to the database but is connected to a mock mysql dump file.
 - Leaderboard column titles are slightly offset.
 - Admin panel is all hardcoded, mock data. (needs token system setup)
-- **Admin permissions and security are not fully implemented for deployment**
+- **Admin permissions and security are not fully implemented for deployment.**
 - Website is not beautiful on phones.
 
 ## License
