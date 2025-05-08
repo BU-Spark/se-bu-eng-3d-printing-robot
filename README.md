@@ -216,6 +216,22 @@ The following are key areas planned for future development:
 * **Job Submission System:** Implement the functionality for users to submit their generated designs as jobs to the BEAR platform queue. This involves defining the API calls and handling the submission logic.
 * **End-to-End Testing:** Conduct thorough testing of the job submission workflow, from design creation to queue confirmation.
 * **Enhanced Visualization:** Integrate STL model visualization directly into the Leaderboard and Library pages to allow users to see the designs associated with specific results.
+* 
+## Known Isues / Unimplemented features
+
+- When logged in as an admin, the admin panel button in nav bar is always highlighted.
+- Session information in account page is hardcoded, mock data.
+- Status in account page is hardcoded, mock data.
+- Previous experiments page is hardcoded, mock data.
+- Tokens along with users and their storage have not been implemented.
+- 3d Visualizer will not load on initial open unless a parameter is changed.
+- Library page is hardcoded, mock data
+- Bear STATUS is unconnected to the BEAR.
+- Leaderboard is unconnected to the database but is connected to a mock mysql dump file.
+- Leaderboard column titles are slightly offset.
+- Admin panel is all hardcoded, mock data. (needs token system setup)
+- **Admin permissions and security are not fully implemented for deployment**
+- Website is not beautiful on phones.
 
 ## License
 
