@@ -192,7 +192,6 @@ export default function NewExpTab() {
 
     setDesignState((prev) => {
       const newState = { ...prev, [key]: value };
-      // generateSTLThrottled(newState); // Removed from here
       return newState;
     });
   };
@@ -204,11 +203,12 @@ export default function NewExpTab() {
    */
   const handleSliderChangeCommitted = (key: string, value: number | number[]) => {
     const singleValue = Array.isArray(value) ? value[0] : value;
+    let newState;
     setDesignState((prev) => {
-      const newState = { ...prev, [key]: singleValue };
-      fetchAndSetSTL(newState); // Call the non-throttled version directly
+      newState = { ...prev, [key]: singleValue };
       return newState;
     });
+    fetchAndSetSTL(newState!);
   };
 
   /**
