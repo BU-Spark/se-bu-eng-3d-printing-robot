@@ -24,6 +24,7 @@ import {
   Button, Slider, MenuItem,
   Box, Dialog, DialogActions,
   DialogContent, DialogContentText, DialogTitle,
+  CircularProgress,
 } from "@mui/material";
 
 // Material-UI icons
@@ -67,14 +68,18 @@ export default function NewExpTab() {
   // Model and error states
   const [stlUrl, setStlUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoadingSTL, setIsLoadingSTL] = useState<boolean>(false);
 
   /**
-   * Throttled STL generation function
-   * @param {DesignState} debouncedState - The current design state
+   * Fetches the STL model from the backend and updates the component state.
+   * @param {DesignState} currentState - The current design state
    */
-  const generateSTLThrottled = throttle(async (debouncedState: DesignState) => {
+  const fetchAndSetSTL = async (currentState: DesignState) => {
+    setIsLoadingSTL(true); // Set loading to true
+    setErrorMessage(null); // Clear previous errors
+    setCsvError(null); // Clear previous CSV errors
     try {
-      const { material, ...paramsWithoutMaterial } = debouncedState;
+      const { material, ...paramsWithoutMaterial } = currentState;
       const params = new URLSearchParams(
         Object.entries(paramsWithoutMaterial).reduce(
           (acc: { [key: string]: string }, [key, value]) => {
@@ -110,8 +115,16 @@ export default function NewExpTab() {
       console.error("Error fetching STL:", error);
       setStlUrl(null); // Clear the 3D model viewer
       setErrorMessage((error as any).message); // Set the error message
+    } finally {
+      setIsLoadingSTL(false); // Set loading to false when fetch completes
     }
-  }, 300);
+  };
+
+  /**
+   * Throttled STL generation function
+   * @param {DesignState} debouncedState - The current design state
+   */
+  const generateSTLThrottled = throttle(fetchAndSetSTL, 300);
 
   // Dialog state for download confirmation
   const [openDialog, setOpenDialog] = useState(false);
@@ -179,9 +192,23 @@ export default function NewExpTab() {
 
     setDesignState((prev) => {
       const newState = { ...prev, [key]: value };
-      generateSTLThrottled(newState);
       return newState;
     });
+  };
+
+  /**
+   * Handles the end of a slider change, triggering STL generation.
+   * @param {string} key - The parameter name
+   * @param {number | number[]} value - New slider value (or array if range slider)
+   */
+  const handleSliderChangeCommitted = (key: string, value: number | number[]) => {
+    const singleValue = Array.isArray(value) ? value[0] : value;
+    let newState;
+    setDesignState((prev) => {
+      newState = { ...prev, [key]: singleValue };
+      return newState;
+    });
+    fetchAndSetSTL(newState!);
   };
 
   /**
@@ -410,6 +437,9 @@ export default function NewExpTab() {
                       onChange={(e, newValue) =>
                         handleSliderChange(key, newValue as number)
                       }
+                      onChangeCommitted={(e, newValue) =>
+                        handleSliderChangeCommitted(key, newValue as number)
+                      }
                       min={metadata.min}
                       max={metadata.max}
                       step={metadata.step}
@@ -461,6 +491,7 @@ export default function NewExpTab() {
             </Typography>
             <Box
               sx={{
+                position: "relative", 
                 flexGrow: 1,
                 display: "flex",
                 justifyContent: "center",
@@ -471,14 +502,36 @@ export default function NewExpTab() {
                 minHeight: "400px",
               }}
             >
+              {/* Primary content: Error, STL, or Initial Text */}
               {csvError || errorMessage ? (
                 <Typography variant="h5" color="error" align="center">
                   {csvError || errorMessage}
                 </Typography>
               ) : stlUrl ? (
                 <STLViewer stlUrl={stlUrl} />
-              ) : (
-                <Typography>Loading 3D model...</Typography>
+              ) : !isLoadingSTL ? ( 
+                <Typography>3D model will appear here.</Typography>
+              ) : null
+              }
+
+              {/* Loader Overlay */}
+              {isLoadingSTL && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "rgba(255, 255, 255, 0.2)", 
+                    zIndex: 1, 
+                  }}
+                >
+                  <CircularProgress sx={{ color: "#CC0000" }} />
+                </Box>
               )}
             </Box>
 
