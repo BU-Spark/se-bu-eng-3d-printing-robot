@@ -228,7 +228,6 @@ const NavBar: React.FC<NavBarProps> = ({ bugReportFormURL, font }) => {
                     "&:hover": buttonHoverStyle,
                     mr: { xs: 1, md: 1 },
                     fontSize: { xs: "0.75rem", md: "0.8rem" },
-                    backgroundColor: "rgba(255,255,255,0.15)",
                   }}
                 >
                   <AdminPanelSettingsIcon />
